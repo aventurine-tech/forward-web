@@ -1,0 +1,9 @@
+# Netlify: build the static site from this repository.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Keep the demo out of search engines until forward.md points here.
+  PREVIEW = "1"

@@ -85,3 +85,8 @@ export const company = {
 
 /** Phone number in tel: form. */
 export const tel = (n: string) => `tel:${n.replace(/\s+/g, '')}`;
+
+/** True on preview builds (GitHub Pages, Netlify, or PREVIEW=1), which search engines must skip. */
+export function isPreview(site: URL | undefined): boolean {
+  return Boolean(process.env.PREVIEW) || /(\.github\.io|\.netlify\.app)$/.test(site?.hostname ?? '');
+}
