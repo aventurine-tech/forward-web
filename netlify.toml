@@ -8,6 +8,6 @@
   # Keep the demo out of search engines until forward.md points here.
   PREVIEW = "1"
   # Show the "design proposal" strip (src/components/DemoGuard.astro).
-  # Set DEMO_PASSWORD in Netlify (Project configuration > Environment variables) to ask for a
-  # password before any page opens. Never put the password in this file.
+  # Set DEMO_PASSWORD in Netlify (Keys and secrets) and netlify/edge-functions/demo-gate.js asks
+  # for it on Netlify's servers before anything is sent. Never put the password in this file.
   DEMO = "1"

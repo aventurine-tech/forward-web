@@ -10,9 +10,9 @@ the `main` branch, the site rebuilds and goes live by itself in about two minute
 2. Click the pencil icon ("Edit this file").
 3. Make the change. Keep quotes, commas and brackets exactly as they are around your text.
 4. Click **Commit changes**, write a short note such as "Update phone number", and confirm.
-5. Open the **Actions** tab to watch the build. A green tick means the change is live. A red
-   cross means something in the file is broken (often a missing quote or comma). The live site
-   stays as it was; open the failed run to see which line is wrong, fix it and commit again.
+5. Open the **Actions** tab to watch the check. A green tick means the change is fine and
+   Netlify publishes it within a couple of minutes. A red cross means something in the file is
+   broken (often a missing quote or comma). The live site stays as it was; open the failed run to see which line is wrong, fix it and commit again.
 
 ## Common changes
 
@@ -78,8 +78,9 @@ applications or messages somewhere else, change that address; the form worker re
 While the site is shown as a proposal, the Netlify version has a strip at the top marking it as
 a design proposal by Radu G, and asks for a password before any page opens.
 
-- The password is the `DEMO_PASSWORD` key in Netlify (Keys and secrets). After changing it,
-  run a new deploy (Deploys > Trigger deploy), because keys only apply from the next build.
+- The password is the `DEMO_PASSWORD` key in Netlify (Keys and secrets). It is checked on
+  Netlify's servers (`netlify/edge-functions/demo-gate.js`), so nothing is sent before it is
+  entered. A correct password is remembered for 7 days; changing it signs everyone out.
 - At handover, delete `DEMO_PASSWORD` in Netlify and remove the `DEMO = "1"` line from
   `netlify.toml`, then deploy again. The strip and the password page disappear.
 
@@ -87,7 +88,8 @@ a design proposal by Radu G, and asks for a password before any page opens.
 
 | Service | What it does | Who should own it |
 | --- | --- | --- |
-| GitHub | Code, builds and hosting (GitHub Pages) | Forward's own GitHub organisation |
+| GitHub | Code and build checks | Forward's own GitHub organisation |
+| Netlify | Builds and hosts the site | Forward |
 | Cloudflare | Form worker and anti-spam check (Turnstile) | Forward |
 | Resend | Sends the form emails from website@forward.md | Forward |
 | Meta developer app | Instagram token for the daily sync | Whoever manages the Instagram account |
