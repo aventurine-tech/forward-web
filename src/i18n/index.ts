@@ -65,7 +65,7 @@ export function stripLocale(pathname: string): string {
  */
 export const company = {
   name: 'Forward International',
-  legalName: 'Firma „Forward International” SRL',
+  legalName: '„Forward International” SRL',
   idno: '1003600056900',
   founded: 1994,
   address: {
