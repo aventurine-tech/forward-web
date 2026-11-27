@@ -48,48 +48,73 @@ ${wrong ? `<p class="err" role="alert">${t.wrong}</p>` : ''}
 }
 
 // One line per event in Netlify's Edge Function logs (Logs > Edge Functions), so it is visible
-// who opened the demo and when. Only the place and the browser are logged, no IP address.
-function log(event, request, context, extra = {}) {
+// who opened the demo and when. To count unique visitors without storing addresses:
+// - "visitor" is a random ID kept in a cookie, so it is one browser (one person, one device);
+// - "network" is a short scrambled code of the IP address (salted with the password, so the
+//   address itself is never written down). People in the same office usually share a network.
+// Visiting /__demo-me once marks that browser as the owner, and its lines say "OWNER".
+const VID = 'forward_vid';
+const ME = 'forward_me';
+const YEAR = 60 * 60 * 24 * 365;
+
+async function log(event, request, context, ids, extra = {}) {
   const geo = context.geo || {};
   const ua = request.headers.get('user-agent') || '';
   const device = /mobile|iphone|android/i.test(ua) ? 'phone' : 'computer';
   const place = [geo.city, geo.country && geo.country.name].filter(Boolean).join(', ') || 'unknown place';
-  console.log(`[demo] ${event} | ${place} | ${device}${extra.path ? ` | ${extra.path}` : ''}`);
+  const who = ids.me ? 'OWNER' : `visitor ${ids.visitor}`;
+  console.log(`[demo] ${event} | ${who} | network ${ids.network} | ${place} | ${device}${extra.path ? ` | ${extra.path}` : ''}`);
 }
+
+function withCookies(response, ids) {
+  if (ids.fresh) response.headers.append('Set-Cookie', `${VID}=${ids.visitor}; Path=/; Max-Age=${YEAR}; HttpOnly; Secure; SameSite=Lax`);
+  return response;
+}
+
+const isPage = (request) => (request.headers.get('accept') || '').includes('text/html');
 
 export default async (request, context) => {
   const password = (Netlify.env.get('DEMO_PASSWORD') || '').trim();
   if (!password) return;
   const token = await sha256(`${password}:forward-demo`);
   const url = new URL(request.url);
+  const known = context.cookies.get(VID);
+  const ids = {
+    visitor: /^[0-9a-f]{8}$/.test(known || '') ? known : crypto.randomUUID().slice(0, 8),
+    fresh: !/^[0-9a-f]{8}$/.test(known || ''),
+    network: (await sha256(`${context.ip || 'unknown'}:${password}`)).slice(0, 8),
+    me: context.cookies.get(ME) === '1',
+  };
+
+  if (url.pathname === '/__demo-me') {
+    console.log(`[demo] owner marked | visitor ${ids.visitor} | network ${ids.network}`);
+    const response = new Response(null, { status: 303, headers: { Location: '/', 'Cache-Control': 'no-store' } });
+    response.headers.append('Set-Cookie', `${ME}=1; Path=/; Max-Age=${YEAR}; HttpOnly; Secure; SameSite=Lax`);
+    return withCookies(response, ids);
+  }
 
   if (url.pathname === '/__demo-login' && request.method === 'POST') {
     const form = await request.formData();
     const next = safeNext(form.get('next'));
     if (String(form.get('pw') || '').trim() !== password) {
-      log('wrong password', request, context);
-      return loginPage(next, true);
+      await log('wrong password', request, context, ids);
+      return withCookies(loginPage(next, true), ids);
     }
-    log('login', request, context);
-    return new Response(null, {
-      status: 303,
-      headers: {
-        Location: next,
-        'Set-Cookie': `${COOKIE}=${token}; Path=/; Max-Age=${WEEK}; HttpOnly; Secure; SameSite=Lax`,
-        'Cache-Control': 'no-store',
-      },
-    });
+    await log('login', request, context, ids);
+    const response = new Response(null, { status: 303, headers: { Location: next, 'Cache-Control': 'no-store' } });
+    response.headers.append('Set-Cookie', `${COOKIE}=${token}; Path=/; Max-Age=${WEEK}; HttpOnly; Secure; SameSite=Lax`);
+    return withCookies(response, ids);
   }
 
   if (context.cookies.get(COOKIE) === token) {
-    if ((request.headers.get('accept') || '').includes('text/html')) log('page view', request, context, { path: url.pathname });
+    if (isPage(request)) await log('page view', request, context, ids, { path: url.pathname });
     const response = await context.next();
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');
     response.headers.set('Cache-Control', 'private, no-store');
-    return response;
+    return withCookies(response, ids);
   }
-  if ((request.headers.get('accept') || '').includes('text/html')) log('password page shown', request, context, { path: url.pathname });
-  return loginPage(url.pathname + url.search, false);
+  if (isPage(request)) await log('password page shown', request, context, ids, { path: url.pathname });
+  return withCookies(loginPage(url.pathname + url.search, false), ids);
 };
 
 export const config = { path: '/*' };

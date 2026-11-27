@@ -81,6 +81,11 @@ a design proposal by Radu G, and asks for a password before any page opens.
 - The password is the `DEMO_PASSWORD` key in Netlify (Keys and secrets). It is checked on
   Netlify's servers (`netlify/edge-functions/demo-gate.js`), so nothing is sent before it is
   entered. A correct password is remembered for 7 days; changing it signs everyone out.
+- Visits are listed in Netlify under Logs > Edge Functions > demo-gate. Each line has an
+  anonymous `visitor` code (one per browser) and a `network` code (a scrambled form of the IP
+  address), so unique visitors can be counted without storing addresses. Open
+  `https://forward-web.netlify.app/__demo-me` once on each of your own devices: from then on your
+  visits show as `OWNER` and are easy to leave out.
 - At handover, delete `DEMO_PASSWORD` in Netlify and remove the `DEMO = "1"` line from
   `netlify.toml`, then deploy again. The strip and the password page disappear.
 
