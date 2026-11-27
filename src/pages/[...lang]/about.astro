@@ -48,10 +48,6 @@ const a = d.about;
           ))
         }
       </ol>
-      <figure class="anniversary reveal">
-        <Photo name="anniversary" alt={a.anniversaryAlt} sizes="(max-width: 1200px) 100vw, 1140px" />
-        <figcaption>{a.anniversaryCaption}</figcaption>
-      </figure>
     </div>
   </section>
 
@@ -208,20 +204,6 @@ const a = d.about;
   .timeline p {
     margin: 0;
     color: var(--muted);
-  }
-
-  .anniversary {
-    margin: 56px 0 0;
-  }
-  .anniversary :global(.photo) {
-    display: block;
-    box-shadow: 0 24px 60px -30px rgba(10, 40, 80, 0.45);
-  }
-  .anniversary figcaption {
-    margin-top: 14px;
-    font-weight: 600;
-    color: var(--muted);
-    font-size: 0.95rem;
   }
 
   .values {
