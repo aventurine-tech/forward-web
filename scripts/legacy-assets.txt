@@ -1,0 +1,37 @@
+# Images copied once from the old forward.md site (and the AmCham logo file).
+# Format: <destination under public/> <source URL>
+brands/national.png https://www.forward.md/admin/uploads/mainCatalogue/national-01-220x128.png
+brands/bonduelle.png https://www.forward.md/admin/uploads/mainCatalogue/bonduelle.png
+brands/golddrop.png https://www.forward.md/admin/uploads/mainCatalogue/logo_goldDrop.png
+brands/farmfrites.png https://www.forward.md/admin/uploads/mainCatalogue/farm-frites-logo.png
+brands/silk.png https://www.forward.md/admin/uploads/mainCatalogue/Silk_Logo.png
+brands/scotti.png https://www.forward.md/admin/uploads/mainCatalogue/25658_logo.png
+brands/figo.png https://www.forward.md/admin/uploads/mainCatalogue/figo_logo.png
+brands/tedi.png https://www.forward.md/admin/uploads/mainCatalogue/Logo_TEDI.png
+brands/baneasa.jpg https://www.forward.md/admin/uploads/mainCatalogue/baneasa_1.jpg
+brands/sadu.png https://www.forward.md/admin/uploads/mainCatalogue/logo-sadu.png
+brands/kamis.png https://www.forward.md/admin/uploads/mainCatalogue/logo_Kamis_.png
+brands/droetker.gif https://www.forward.md/admin/uploads/mainCatalogue/dr._oetker_logo_.gif
+brands/oleina.png https://www.forward.md/admin/uploads/mainCatalogue/395653010_w0_h0_oleyna.png
+brands/tymbark.png https://www.forward.md/admin/uploads/mainCatalogue/LOGO_TYMBARK_v0.png
+brands/hochland.png https://www.forward.md/admin/uploads/mainCatalogue/logo-hochland.png
+brands/limo.png https://www.forward.md/admin/uploads/mainCatalogue/Limo_logo.png
+brands/scandiafood.png https://www.forward.md/admin/uploads/mainCatalogue/scandia-tradox.png
+brands/yasnosolnyshko.png https://www.forward.md/admin/uploads/mainCatalogue/yasno-solnyshko.png
+brands/croco.png https://www.forward.md/admin/uploads/mainCatalogue/croco.png
+brands/aladushkin.png https://www.forward.md/admin/uploads/mainCatalogue/aladuskin.png
+brands/algida.png https://www.forward.md/admin/uploads/mainCatalogue/Algida.png
+brands/luxmenu.png https://www.forward.md/admin/uploads/mainCatalogue/lux_menu.png
+photos/chisinau.jpg https://www.forward.md/admin/uploads/childSliders/chisinau1.jpg
+photos/warehouse.jpg https://www.forward.md/admin/uploads/childSliders/dep.jpg
+photos/slider3.jpg https://www.forward.md/admin/uploads/childSliders/slider3.jpg
+photos/distribution.jpg https://www.forward.md/admin/uploads/childsCatalogue/distributie.jpg
+photos/storage.jpg https://www.forward.md/admin/uploads/childsCatalogue/15.jpg
+photos/transport.jpg https://www.forward.md/admin/uploads/childsCatalogue/transportare.jpg
+photos/office.jpg https://www.forward.md/admin/uploads/news/oficiu.jpg
+photos/team.jpg https://www.forward.md/admin/uploads/news/aaa.jpg
+photos/anniversary.jpg https://www.forward.md/admin/uploads/news/baner_25_ani.jpg
+photos/services-banner.jpg https://www.forward.md/images/img/32.jpg
+photos/hero-bg.png https://www.forward.md/images/bg/21.png
+reference/logo-amcham.jpg https://www.amcham.md/userfiles/image/2018/Logo%20Foward%20International%20SRL%20jpg.jpg
+reference/logo-old-site.png https://www.forward.md/images/img/f1.png
