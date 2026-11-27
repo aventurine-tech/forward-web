@@ -1,0 +1,24 @@
+name: Check build
+
+# The site is hosted on Netlify, which builds and publishes every push to main by itself.
+# This job only checks that the site still builds (types, translations, pages).
+on:
+  push:
+    branches: [main, claude/project-thread-j645ju]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
