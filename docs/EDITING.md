@@ -73,6 +73,12 @@ Both forms send an email to the address set as `TO_EMAIL` in `form-worker/wrangl
 adds one, their CV attached (PDF, Word, JPG or PNG, up to 5 MB). To send
 applications or messages somewhere else, change that address; the form worker redeploys by itself.
 
+## Publishing on Netlify
+
+Netlify builds are paused (`ignore` in `netlify.toml`), so changes merged to `main` do not go
+live by themselves. To publish the latest version, add the key `PUBLISH` with the value `yes` in
+Netlify (Keys and secrets) and redeploy; remove the key again afterwards to pause builds.
+
 ## Demo protection on Netlify
 
 While the site is shown as a proposal, the Netlify version has a strip at the top marking it as
