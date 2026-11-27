@@ -1,0 +1,37 @@
+name: Sync Instagram posts
+
+# Once a day, pulls the latest Instagram posts into the News page and redeploys the
+# site if anything changed. Needs the INSTAGRAM_TOKEN secret (see README); without it
+# the job does nothing.
+on:
+  schedule:
+    - cron: '17 5 * * *' # every day at 05:17 UTC (7:17 in Chișinău in winter, 8:17 in summer)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/instagram-sync.mjs
+        env:
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+      - name: Commit and redeploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
+          git add -A public/instagram src/data/instagram.json
+          git diff --cached --quiet && echo "No new posts" && exit 0
+          git commit -m "Sync Instagram posts"
+          git push
+          # Pushes made with the workflow token don't start other workflows, so start the deploy here.
+          gh workflow run deploy.yml --ref "${GITHUB_REF_NAME}"
