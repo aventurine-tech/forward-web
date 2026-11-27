@@ -76,7 +76,7 @@ applications or messages somewhere else, change that address; the form worker re
 ## Demo protection on Netlify
 
 While the site is shown as a proposal, the Netlify version has a strip at the top marking it as
-an Aventurine design proposal, and asks for a password before any page opens.
+a design proposal by Radu G, and asks for a password before any page opens.
 
 - The password is the `DEMO_PASSWORD` key in Netlify (Keys and secrets). After changing it,
   run a new deploy (Deploys > Trigger deploy), because keys only apply from the next build.

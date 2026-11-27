@@ -7,7 +7,7 @@
   NODE_VERSION = "22"
   # Keep the demo out of search engines until forward.md points here.
   PREVIEW = "1"
-  # Show the "design proposal by Aventurine" strip (src/components/DemoGuard.astro).
+  # Show the "design proposal" strip (src/components/DemoGuard.astro).
   # Set DEMO_PASSWORD in Netlify (Project configuration > Environment variables) to ask for a
   # password before any page opens. Never put the password in this file.
   DEMO = "1"
