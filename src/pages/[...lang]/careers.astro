@@ -82,6 +82,8 @@ type IconName = Parameters<typeof Icon>[0]['name'];
         class="form reveal"
         action={live ? endpoint : path(locale, '/thanks')}
         method={live ? 'post' : 'get'}
+        enctype={live ? 'multipart/form-data' : undefined}
+        data-job-form
       >
         <input type="hidden" name="lang" value={locale} />
         <input type="hidden" name="kind" value="job" />
@@ -121,6 +123,16 @@ type IconName = Parameters<typeof Icon>[0]['name'];
           <span class="form__hint">{c.messageHint}</span>
           <textarea name="message" rows="5" maxlength="5000" required></textarea>
         </label>
+        <label class="file">
+          {c.cv}
+          <span class="form__hint">{c.cvHint}</span>
+          <input
+            name="cv"
+            type="file"
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png"
+            data-cv
+          />
+        </label>
         {live && <div class="cf-turnstile" data-sitekey={siteKey} data-language={locale} data-size="flexible"></div>}
         <p class="form__error" role="alert" data-form-error hidden></p>
         <button class="btn btn--primary" type="submit">
@@ -140,6 +152,18 @@ type IconName = Parameters<typeof Icon>[0]['name'];
       box.textContent = errors[reason] || errors.error;
       box.hidden = false;
     }
+    // Check the CV before sending, so nobody waits for a 5 MB upload to be refused.
+    var jobForm = document.querySelector('[data-job-form]');
+    var cv = document.querySelector('[data-cv]');
+    var okType = /\.(pdf|docx?|jpe?g|png)$/i;
+    var check = function () {
+      var file = cv && cv.files && cv.files[0];
+      var bad = file && (file.size > 5 * 1024 * 1024 || !okType.test(file.name));
+      if (cv) cv.setCustomValidity(bad ? errors.file : '');
+      return !bad;
+    };
+    if (cv) cv.addEventListener('change', function () { if (!check()) cv.reportValidity(); });
+    if (jobForm) jobForm.addEventListener('submit', function (e) { if (!check()) { e.preventDefault(); cv.reportValidity(); } });
   </script>
 </Base>
 
@@ -234,6 +258,22 @@ type IconName = Parameters<typeof Icon>[0]['name'];
     gap: 10px;
     color: var(--blue-600);
     font-weight: 600;
+  }
+  .file input {
+    padding: 11px 12px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .file input::file-selector-button {
+    font: inherit;
+    font-weight: 600;
+    margin-right: 14px;
+    padding: 8px 16px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--blue-50);
+    color: var(--blue-700);
+    cursor: pointer;
   }
   #form {
     scroll-margin-top: calc(var(--header-h) + 24px);
