@@ -130,8 +130,10 @@ The site itself is built by Netlify, so also add `PUBLIC_FORM_ENDPOINT` (the wor
 
 ## Deploying
 
-Netlify builds and publishes the site on every push to `main` (settings in `netlify.toml`).
-`.github/workflows/check.yml` only checks that the site builds. While it is a demo, the
+`.github/workflows/deploy.yml` publishes every push to `main` to GitHub Pages as a working
+preview (with the demo strip, no password). Netlify hosts the version shown to others; its builds
+are paused unless `PUBLISH=yes` is set in Netlify (settings in `netlify.toml`).
+`.github/workflows/check.yml` checks that pull requests build. While it is a demo, the
 `DEMO_PASSWORD` key in Netlify keeps it behind a password (`netlify/edge-functions/demo-gate.js`).
 To serve it at forward.md: add the domain in Netlify under Domain management, point DNS at
 Netlify, remove `PREVIEW` and `DEMO` from `netlify.toml` and delete `DEMO_PASSWORD`.

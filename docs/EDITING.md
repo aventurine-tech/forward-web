@@ -10,8 +10,9 @@ the `main` branch, the site rebuilds and goes live by itself in about two minute
 2. Click the pencil icon ("Edit this file").
 3. Make the change. Keep quotes, commas and brackets exactly as they are around your text.
 4. Click **Commit changes**, write a short note such as "Update phone number", and confirm.
-5. Open the **Actions** tab to watch the check. A green tick means the change is fine and
-   Netlify publishes it within a couple of minutes. A red cross means something in the file is
+5. Open the **Actions** tab to watch the build. A green tick means the change is live on the
+   GitHub Pages preview within a couple of minutes (Netlify only updates when publishing is
+   switched on, see below). A red cross means something in the file is
    broken (often a missing quote or comma). The live site stays as it was; open the failed run to see which line is wrong, fix it and commit again.
 
 ## Common changes
