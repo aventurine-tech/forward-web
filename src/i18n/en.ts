@@ -11,6 +11,7 @@ const en = {
     services: 'Services',
     about: 'About us',
     brands: 'Brands',
+    news: 'News',
     contact: 'Contact',
     cta: 'Become a partner',
     menu: 'Menu',
@@ -101,6 +102,15 @@ const en = {
       points: ['Professional shelf layouts', 'Promotions and tastings in store', 'Market studies and brand development'],
     },
   ],
+  news: {
+    title: 'News',
+    lead: 'Life at Forward: our team, events, charity and new products, straight from our Facebook and Instagram pages.',
+    instagramTitle: 'Latest on Instagram',
+    instagramFollow: 'Follow us on Instagram',
+    facebookTitle: 'On Facebook',
+    facebookFollow: 'Open our Facebook page',
+    note: 'Posts are shown by Instagram and Facebook, which may set their own cookies.',
+  },
   servicesPage: {
     title: 'Services',
     lead: 'Import, warehousing, transport and in-store work: everything a brand needs to succeed on the Moldovan market, from one partner.',
@@ -214,6 +224,10 @@ const en = {
       {
         title: 'Spam protection',
         text: 'The form is protected by Cloudflare Turnstile, which may process technical data about your browser to tell people from bots.',
+      },
+      {
+        title: 'Social media posts',
+        text: 'The News page shows posts from our Facebook and Instagram pages. They are loaded from Meta (Facebook and Instagram), which may process data about your visit and set cookies under its own privacy policy.',
       },
       {
         title: 'Your rights',

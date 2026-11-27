@@ -75,6 +75,8 @@ export const company = {
   email: 'info@forward.md',
   facebook: 'https://www.facebook.com/p/Forward-International-100063790860323/',
   linkedin: 'https://www.linkedin.com/company/forward-international-srl',
+  instagram: 'https://www.instagram.com/forward.international/',
+  instagramHandle: '@forward.international',
 };
 
 /** Phone number in tel: form. */
