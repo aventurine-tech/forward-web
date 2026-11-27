@@ -1,0 +1,36 @@
+name: Save Instagram pictures
+
+# Saves the pictures listed in scripts/instagram-images.txt as
+# public/instagram/<shortcode>.jpg and commits them. Runs when that list changes, or by hand.
+on:
+  push:
+    paths: [scripts/instagram-images.txt, .github/workflows/instagram.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download pictures
+        run: |
+          mkdir -p public/instagram
+          grep -v '^#' scripts/instagram-images.txt | while read -r code url; do
+            [ -n "$code" ] || continue
+            if curl -fsSL --retry 3 -o "public/instagram/$code.jpg" "$url"; then
+              echo "ok   $code"
+            else
+              echo "::warning::failed $code"; rm -f "public/instagram/$code.jpg"
+            fi
+          done
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
+          git add public/instagram
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Save Instagram pictures"
+          git push
