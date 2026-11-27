@@ -67,6 +67,15 @@ The README explains how to set up the token and how to add a post by hand.
 
 Nothing to do: the News page shows the Facebook page's live timeline.
 
+### Share pictures (Facebook, Viber, WhatsApp, Telegram)
+
+Every page has its own 1200×630 share picture in each language, made during the build from
+the page's title and intro text, so changing the text also changes the picture. The layout
+is in `src/og/render.ts`; which photo and text each page uses is in `src/og/cards.ts`.
+Facebook keeps a copy of a link's picture for a while; to refresh it, paste the link into
+Facebook's Sharing Debugger and press **Scrape Again**. Viber refreshes on its own after a
+few days. While the Netlify password is on, Facebook and Viber only see the password page.
+
 ## Contact and job application forms
 
 Both forms send an email to the address set as `TO_EMAIL` in `form-worker/wrangler.toml`
