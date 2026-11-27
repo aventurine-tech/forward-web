@@ -1,0 +1,29 @@
+name: Update Instagram posts
+
+# Downloads the pictures and captions of the posts listed in
+# scripts/instagram-posts.txt and commits them. Runs when that list changes, or by hand.
+on:
+  push:
+    paths: [scripts/instagram-posts.txt, scripts/fetch-instagram.mjs, .github/workflows/instagram.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/fetch-instagram.mjs
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
+          git add public/instagram src/data/instagram.json
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Update Instagram posts"
+          git push
