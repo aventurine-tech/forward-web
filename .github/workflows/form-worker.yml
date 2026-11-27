@@ -7,7 +7,7 @@ name: Deploy contact form worker
 # FORWARD_FORME secret.
 on:
   push:
-    branches: [main, claude/project-thread-j645ju]
+    branches: [main]
     paths: [form-worker/**, .github/workflows/form-worker.yml]
   workflow_dispatch:
 
