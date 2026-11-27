@@ -7,7 +7,7 @@ const half = Math.ceil(brands.length / 2);
 const rows = [brands.slice(0, half), brands.slice(half)];
 ---
 
-<div class="marquee" aria-label={brands.map((b) => b.name).join(', ')}>
+<div class="marquee" role="group" aria-label={brands.map((b) => b.name).join(', ')}>
   {
     rows.map((row, r) => (
       <div class:list={['marquee__row', { 'marquee__row--rev': r === 1 }]} aria-hidden="true">

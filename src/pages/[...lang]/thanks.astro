@@ -7,7 +7,7 @@ const { locale } = Astro.props as { locale: Locale };
 const d = t(locale);
 ---
 
-<Base locale={locale} title={d.thanks.title}>
+<Base locale={locale} title={d.thanks.title} noindex>
   <section class="section">
     <div class="container done">
       <span class="done__icon" aria-hidden="true">✓</span>

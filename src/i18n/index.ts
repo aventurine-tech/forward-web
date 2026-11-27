@@ -32,17 +32,21 @@ export function localePaths() {
 // Base path the site is served from: '/' normally, '/forward-web/' on GitHub Pages.
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-/** Build an internal URL for a locale, e.g. path('en', '/about') -> '/en/about'. */
+/** Build an internal URL for a locale, e.g. path('en', '/about') -> '/en/about/'. */
 export function path(locale: Locale, to = '/'): string {
   const clean = to === '/' ? '' : to;
   const local = locale === defaultLocale ? clean || '/' : `/${locale}${clean}`;
-  return base + local;
+  // Pages are built as folders, so the trailing slash avoids a redirect on every click.
+  return base + (local.endsWith('/') ? local : `${local}/`);
 }
 
 /** Path to a file in public/, honouring the base path. */
 export function asset(file: string): string {
   return `${base}/${file.replace(/^\//, '')}`;
 }
+
+/** Indexable pages, without locale prefix. Used for the sitemap. */
+export const pages = ['/', '/services', '/brands', '/about', '/news', '/careers', '/contact', '/privacy'] as const;
 
 /** Strip the base and locale prefix from a pathname, e.g. '/en/about' -> '/about'. */
 export function stripLocale(pathname: string): string {

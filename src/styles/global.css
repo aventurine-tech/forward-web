@@ -136,7 +136,7 @@ p {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--blue-600);
+  color: var(--blue-700);
   margin-bottom: 16px;
 }
 
@@ -177,13 +177,13 @@ p {
 }
 
 .btn--primary {
-  background: var(--blue);
+  background: var(--blue-600);
   color: #fff;
   box-shadow: 0 10px 24px -10px rgba(40, 142, 214, 0.8);
 }
 
 .btn--primary:hover {
-  background: var(--blue-600);
+  background: var(--blue-700);
   transform: translateY(-1px);
 }
 
@@ -345,5 +345,90 @@ p {
   }
   .btn {
     padding: 14px 22px;
+  }
+}
+
+/* Forms (contact and careers). */
+.form {
+  display: grid;
+  gap: 18px;
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: 24px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+}
+.form h2 {
+  font-size: 1.7rem;
+  margin: 0 0 4px;
+}
+.form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.form label {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+.form input,
+.form select,
+.form textarea {
+  font: inherit;
+  font-weight: 400;
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text);
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(40, 142, 214, 0.15);
+}
+.form .btn {
+  justify-self: start;
+}
+.form__note {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+}
+.form__error {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fdecea;
+  border: 1px solid #f5c2bd;
+  color: #8a1c13;
+  font-size: 0.95rem;
+}
+.form__hint {
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+@media (max-width: 900px) {
+  .form__row {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .form .btn {
+    justify-self: stretch;
   }
 }
