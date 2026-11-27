@@ -36,7 +36,7 @@ npm run preview  # serves dist/ locally
 | `/services` | Distribution, warehousing, transport, merchandising (each with an anchor), coverage map |
 | `/brands` | Partner brand logos with a product-group filter, and own brands |
 | `/about` | Story, motto, portfolio timeline, values, quality |
-| `/news` | Latest Instagram posts (`src/data/instagram.json`) and the live Facebook timeline |
+| `/news` | Latest Instagram posts (`src/data/instagram.json`) and a link to the Facebook page |
 | `/careers` | Why work at Forward, teams, job application form with optional CV upload (same form worker, `kind=job`; the CV is emailed as an attachment) |
 | `/contact` | Office, phone, email, company details, contact form, map |
 | `/thanks`, `/privacy`, `/404` | Form confirmation, privacy, not found (thanks and 404 are `noindex`) |
@@ -74,7 +74,7 @@ the company's LinkedIn page. To check before launch:
 
 ## News page
 
-The Facebook section uses Facebook's Page Plugin, so new Facebook posts appear on their own.
+The Facebook section is just a link to the page; nothing is loaded from Facebook.
 
 The Instagram grid is drawn by the site itself, so the page loads nothing from Instagram.
 Posts are in `src/data/instagram.json` and their pictures in `public/instagram/`.

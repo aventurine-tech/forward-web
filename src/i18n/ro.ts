@@ -113,7 +113,6 @@ const ro: Dictionary = {
     facebookFollow: 'Deschide pagina de Facebook',
     facebookText: 'Evenimente, noutăți din echipă și acțiuni caritabile, așa cum le publicăm pe pagina noastră de Facebook.',
     watch: 'Vezi pe Instagram',
-    note: 'Cronologia de Facebook este încărcată de la Facebook, care poate seta propriile cookie-uri.',
   },
   servicesPage: {
     title: 'Servicii',
@@ -279,7 +278,7 @@ const ro: Dictionary = {
       },
       {
         title: 'Postări din rețelele sociale',
-        text: 'Pagina Noutăți afișează postări de pe paginile noastre de Facebook și Instagram. Cronologia de Facebook este încărcată de la Meta, care poate procesa date despre vizita ta și seta cookie-uri conform propriei politici de confidențialitate.',
+        text: 'Pagina Noutăți afișează postări de pe pagina noastră de Instagram, cu imagini salvate pe acest site, și linkuri către paginile noastre de Facebook și Instagram. Nimic nu se încarcă de la Meta până nu deschizi unul dintre aceste linkuri.',
       },
       {
         title: 'Drepturile tale',
