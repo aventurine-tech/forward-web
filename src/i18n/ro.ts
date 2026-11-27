@@ -21,7 +21,7 @@ const ro: Dictionary = {
   },
   home: {
     eyebrow: 'Din 1994 · Distribuție și logistică',
-    title: 'Gândim înainte. Mergem înainte.',
+    title: 'Gândind în perspectivă. Mergând înainte.',
     lead: 'Importăm, depozităm și livrăm produse alimentare de la peste 20 de branduri internaționale către circa 2.000 de magazine din toată Moldova, în fiecare zi.',
     primary: 'Devino partener',
     secondary: 'Serviciile noastre',
