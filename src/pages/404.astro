@@ -6,7 +6,7 @@ const locale = defaultLocale;
 const d = t(locale);
 ---
 
-<Base locale={locale} title={d.notFound.title}>
+<Base locale={locale} title={d.notFound.title} noindex>
   <section class="section">
     <div class="container nf">
       <span class="nf__code">404</span>
@@ -15,6 +15,13 @@ const d = t(locale);
       <a class="btn btn--primary" href={path(locale)}>{d.notFound.back}</a>
     </div>
   </section>
+  <script is:inline define:vars={{ base: import.meta.env.BASE_URL.replace(/\/$/, '') }}>
+    // Old forward.md news articles (/ro/news/newsdetalii/64/p/1/) have no page of their own
+    // any more; send them to the News page in the same language.
+    var rest = location.pathname.slice(base.length);
+    var m = rest.match(/^\/(ro|en|ru)\/news\/./);
+    if (m) location.replace(base + (m[1] === 'ro' ? '' : '/' + m[1]) + '/news/');
+  </script>
 </Base>
 
 <style>

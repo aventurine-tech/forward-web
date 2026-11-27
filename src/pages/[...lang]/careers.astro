@@ -1,0 +1,250 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import Photo from '../../components/Photo.astro';
+import { company, localePaths, path, t, type Locale } from '../../i18n';
+
+export const getStaticPaths = localePaths;
+const { locale } = Astro.props as { locale: Locale };
+const d = t(locale);
+const c = d.careers;
+const f = d.contact;
+
+// Same form worker as the contact page; kind=job makes it an application email.
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined;
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
+const live = Boolean(endpoint && siteKey);
+type IconName = Parameters<typeof Icon>[0]['name'];
+---
+
+<Base locale={locale} title={c.title} description={c.lead}>
+  <PageHero eyebrow={d.nav.careers} title={c.title} lead={c.lead}>
+    <div class="hero-cta">
+      <a class="btn btn--primary" href="#form">{c.formTitle}</a>
+      <a class="btn btn--ghost" href={company.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" size={20} /> LinkedIn</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container why">
+      <div class="why__photo reveal">
+        <Photo name="fleet" alt={d.photos.fleet} />
+      </div>
+      <div>
+        <h2>{c.whyTitle}</h2>
+        <ul class="why__list">
+          {
+            c.why.map((w, i) => (
+              <li class="reveal" style={`--delay:${i * 0.06}s`}>
+                <h3>{w.title}</h3>
+                <p>{w.text}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="container">
+      <div class="section__head">
+        <h2>{c.teamsTitle}</h2>
+        <p>{c.teamsLead}</p>
+      </div>
+      <ul class="teams">
+        {
+          c.teams.map((tm, i) => (
+            <li class="reveal" style={`--delay:${i * 0.05}s`}>
+              <span class="teams__icon"><Icon name={tm.icon as IconName} /></span>
+              <h3>{tm.title}</h3>
+              <p>{tm.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container apply">
+      <div class="apply__intro">
+        <h2>{c.formTitle}</h2>
+        <p class="lead">{c.formLead}</p>
+        <p class="apply__alt">
+          <Icon name="mail" size={20} />
+          <a href={`mailto:${company.email}`}>{company.email}</a>
+        </p>
+      </div>
+      <form
+        id="form"
+        class="form reveal"
+        action={live ? endpoint : path(locale, '/thanks')}
+        method={live ? 'post' : 'get'}
+      >
+        <input type="hidden" name="lang" value={locale} />
+        <input type="hidden" name="kind" value="job" />
+        <label class="hp" aria-hidden="true">
+          Website
+          <input name="website" tabindex="-1" autocomplete="off" />
+        </label>
+        <div class="form__row">
+          <label>
+            {f.firstName} *
+            <input name="firstName" autocomplete="given-name" required />
+          </label>
+          <label>
+            {f.lastName} *
+            <input name="lastName" autocomplete="family-name" required />
+          </label>
+        </div>
+        <div class="form__row">
+          <label>
+            {f.email} *
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+          <label>
+            {c.phone}
+            <input name="phone" type="tel" autocomplete="tel" maxlength="40" />
+          </label>
+        </div>
+        <label>
+          {c.position}
+          <select name="position">
+            {c.teams.map((tm) => <option>{tm.title}</option>)}
+            <option value="">—</option>
+          </select>
+        </label>
+        <label>
+          {c.message} *
+          <span class="form__hint">{c.messageHint}</span>
+          <textarea name="message" rows="5" maxlength="5000" required></textarea>
+        </label>
+        {live && <div class="cf-turnstile" data-sitekey={siteKey} data-language={locale} data-size="flexible"></div>}
+        <p class="form__error" role="alert" data-form-error hidden></p>
+        <button class="btn btn--primary" type="submit">
+          {c.send}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <p class="form__note">{c.note}</p>
+      </form>
+    </div>
+  </section>
+
+  {live && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+  <script is:inline define:vars={{ errors: f.formErrors }}>
+    var reason = new URLSearchParams(location.search).get('form');
+    var box = document.querySelector('[data-form-error]');
+    if (reason && box) {
+      box.textContent = errors[reason] || errors.error;
+      box.hidden = false;
+    }
+  </script>
+</Base>
+
+<style>
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .why {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+  }
+  .why__photo :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 24px;
+  }
+  .why h2 {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    margin: 0 0 24px;
+  }
+  .why__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 22px;
+  }
+  .why__list li {
+    padding-left: 22px;
+    border-left: 3px solid var(--blue);
+  }
+  .why__list h3 {
+    font-size: 1.1rem;
+    margin: 0 0 4px;
+  }
+  .why__list p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .teams {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+    gap: 18px;
+  }
+  .teams li {
+    padding: 26px 24px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+  }
+  .teams__icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--blue-50);
+    color: var(--blue-600);
+    margin-bottom: 18px;
+  }
+  .teams h3 {
+    font-size: 1.15rem;
+    margin: 0 0 6px;
+  }
+  .teams p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .apply {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: start;
+  }
+  .apply h2 {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    margin: 0 0 16px;
+  }
+  .apply__alt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--blue-600);
+    font-weight: 600;
+  }
+  #form {
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+  @media (max-width: 900px) {
+    .why,
+    .apply {
+      grid-template-columns: 1fr;
+    }
+    .why__photo :global(img) {
+      aspect-ratio: 16 / 10;
+    }
+  }
+</style>

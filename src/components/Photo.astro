@@ -1,5 +1,5 @@
 ---
-// A photo from public/photos/ served as WebP with a JPEG fallback.
+// A photo from public/photos/ served as WebP (800px and full size) with a JPEG fallback.
 import { asset } from '../i18n';
 
 interface Props {
@@ -7,14 +7,20 @@ interface Props {
   alt: string;
   class?: string;
   eager?: boolean;
+  /** How wide the photo is shown, so phones can pick the 800px file. */
+  sizes?: string;
 }
-const sizes = { city: [1903, 800], warehouse: [1600, 801], fleet: [1600, 646] } as const;
-const { name, alt, class: cls, eager = false } = Astro.props;
-const [w, h] = sizes[name];
+const dims = { city: [1903, 800], warehouse: [1600, 801], fleet: [1600, 646] } as const;
+const { name, alt, class: cls, eager = false, sizes = '(max-width: 900px) 100vw, 50vw' } = Astro.props;
+const [w, h] = dims[name];
 ---
 
 <picture class:list={['photo', cls]}>
-  <source srcset={asset(`photos/${name}.webp`)} type="image/webp" />
+  <source
+    srcset={`${asset(`photos/${name}-800.webp`)} 800w, ${asset(`photos/${name}.webp`)} ${w}w`}
+    sizes={sizes}
+    type="image/webp"
+  />
   <img
     src={asset(`photos/${name}.jpg`)}
     alt={alt}

@@ -4,6 +4,9 @@ New site for [Forward International](https://www.forward.md), a food import, war
 distribution company in Moldova (since 1994). Built with [Astro](https://astro.build) as a fully
 static site, in Romanian (default, at `/`), English (`/en/...`) and Russian (`/ru/...`).
 
+For non-developers: see [docs/EDITING.md](docs/EDITING.md) for how to change text, brands,
+figures and posts from the browser.
+
 ## Getting started
 
 ```sh
@@ -19,7 +22,9 @@ npm run preview  # serves dist/ locally
 | --- | --- |
 | All copy, per language | `src/i18n/ro.ts`, `en.ts`, `ru.ts` (one shared type: a missing key fails the build) |
 | Address, phone, email, IDNO, social links | `company` in `src/i18n/index.ts` |
-| Partner brands | `src/data/brands.ts`, logos in `public/brands/` |
+| Partner brands and their product groups | `src/data/brands.ts`, logos in `public/brands/` |
+| Coverage map (Moldova outline, towns) | `src/data/moldova.ts`, `src/components/CoverageMap.astro` |
+| Font (Inter, self-hosted) | `public/fonts/` |
 | Logo (vector) | `src/data/logo.ts`, redrawn from `design/reference/logo-amcham.jpg` by `scripts/build-logo.py` |
 | Photos | `public/photos/` (WebP + JPEG); originals from the old site in `design/legacy/` |
 
@@ -27,16 +32,26 @@ npm run preview  # serves dist/ locally
 
 | Route | Purpose |
 | --- | --- |
-| `/` | Hero, key figures, services, why Forward, brand wall, story, call to action |
-| `/services` | Distribution, warehousing, transport, merchandising (each with an anchor) |
-| `/brands` | Partner brand logos and own brands |
+| `/` | Hero, key figures, services, why Forward, coverage map, brand wall, story, call to action |
+| `/services` | Distribution, warehousing, transport, merchandising (each with an anchor), coverage map |
+| `/brands` | Partner brand logos with a product-group filter, and own brands |
 | `/about` | Story, motto, portfolio timeline, values, quality |
-| `/news` | Latest Instagram posts (`src/data/instagram.ts`) and the live Facebook timeline |
+| `/news` | Latest Instagram posts (`src/data/instagram.json`) and the live Facebook timeline |
+| `/careers` | Why work at Forward, teams, job application form (same form worker, `kind=job`) |
 | `/contact` | Office, phone, email, company details, contact form, map |
-| `/thanks`, `/privacy`, `/404` | Form confirmation, privacy, not found |
+| `/thanks`, `/privacy`, `/404` | Form confirmation, privacy, not found (thanks and 404 are `noindex`) |
+| `/sitemap.xml`, `/robots.txt` | Generated from `pages` in `src/i18n/index.ts` |
 
 Old forward.md addresses (`/ro/servicii/`, `/ro/contacts/`, `/ro/about/`, and their
-EN/RU versions) redirect to the new pages (see `redirects` in `astro.config.mjs`).
+EN/RU versions) redirect to the new pages (see `redirects` in `astro.config.mjs`). Old news
+articles (`/ro/news/newsdetalii/…`) land on the 404 page, which forwards them to the News page.
+
+## Search engines
+
+While the site runs on the GitHub Pages preview (`*.github.io`), every page carries
+`noindex` and `robots.txt` disallows crawling, so the preview never competes with forward.md.
+Both switch to indexable automatically once the site is built for the real domain. After the
+switch, submit `https://www.forward.md/sitemap.xml` in Google Search Console.
 
 ## Content sources
 
@@ -48,7 +63,11 @@ the company's LinkedIn page. To check before launch:
 - **Figures:** 70+ vehicles and 3,000+ products date from 2019; 400+ employees is from the
   register (406). Update in `stats` in each language file.
 - **Brands:** the list is the one on the old site. Own brands (Morarița, Poienița) are from a 2018
-  news post.
+  news post. The product group of each brand (for the filter) was assigned from what the brand
+  sells; confirm it.
+- **Careers:** the teams and reasons to join are general (based on the company's size, services
+  and Instagram posts), not specific vacancies.
+- **Coverage map:** the towns illustrate national coverage; they are not a list of real routes.
 - EN and RU copy were written fresh (the old EN/RU pages were mostly untranslated); have them
   reviewed by native speakers.
 

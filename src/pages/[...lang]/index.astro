@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Stats from '../../components/Stats.astro';
 import BrandMarquee from '../../components/BrandMarquee.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import CoverageMap from '../../components/CoverageMap.astro';
 import Icon from '../../components/Icon.astro';
 import Photo from '../../components/Photo.astro';
 import { localePaths, path, t, type Locale } from '../../i18n';
@@ -65,7 +66,7 @@ const whyIcons = ['map', 'cold', 'team', 'quality'] as const;
       <div class="services">
         {
           d.services.map((s, i) => (
-            <a class="service reveal" style={`--delay:${i * 0.08}s`} href={path(locale, `/services#${s.id}`)}>
+            <a class="service reveal" style={`--delay:${i * 0.08}s`} href={`${path(locale, '/services')}#${s.id}`}>
               <span class="service__num">0{i + 1}</span>
               <span class="service__icon"><Icon name={s.id as 'distribution'} size={28} /></span>
               <h3>{s.title}</h3>
@@ -103,6 +104,8 @@ const whyIcons = ['map', 'cold', 'team', 'quality'] as const;
       </div>
     </div>
   </section>
+
+  <CoverageMap locale={locale} />
 
   <section class="section brands-sec">
     <div class="container">

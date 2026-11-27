@@ -1,9 +1,10 @@
-// Contact form handler for forward.md.
-// The site's form posts here as a normal HTML form. We verify the Turnstile token,
+// Contact and job application form handler for forward.md.
+// The site's forms post here as normal HTML forms (kind=job marks a job application).
+// We verify the Turnstile token,
 // drop honeypot hits, email the message to the office and redirect back to the site.
 
 const LOCALES = { ro: '', en: '/en', ru: '/ru' };
-const LIMITS = { firstName: 80, lastName: 80, email: 200, company: 160, message: 5000 };
+const LIMITS = { firstName: 80, lastName: 80, email: 200, company: 160, phone: 40, position: 120, message: 5000 };
 
 export default {
   async fetch(request, env) {
@@ -19,8 +20,9 @@ export default {
     }
 
     const prefix = LOCALES[form.get('lang')] ?? '';
+    const job = form.get('kind') === 'job';
     const to = (page, query = '') => Response.redirect(`${env.SITE_URL}${prefix}/${page}/${query}`, 303);
-    const fail = (reason) => to('contact', `?form=${reason}#form`);
+    const fail = (reason) => to(job ? 'careers' : 'contact', `?form=${reason}#form`);
 
     // Honeypot: real people never see or fill this field. Pretend it worked.
     if (form.get('website')) return to('thanks');
@@ -46,11 +48,15 @@ export default {
     const text = [
       `Nume: ${f.firstName} ${f.lastName}`,
       `Email: ${f.email}`,
-      `Companie: ${f.company || '-'}`,
+      job ? `Telefon: ${f.phone || '-'}` : `Companie: ${f.company || '-'}`,
+      ...(job ? [`Post: ${f.position || '-'}`] : []),
       `Limba site-ului: ${form.get('lang') || 'ro'}`,
       '',
       f.message,
     ].join('\n');
+    const subject = job
+      ? `Candidatură de pe site: ${f.firstName} ${f.lastName} (${f.position || 'post nespecificat'})`
+      : `Mesaj nou de pe site: ${f.firstName} ${f.lastName}`;
 
     const sent = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -59,7 +65,7 @@ export default {
         from: env.FROM_EMAIL,
         to: [env.TO_EMAIL],
         reply_to: f.email,
-        subject: `Mesaj nou de pe site: ${f.firstName} ${f.lastName}`.replace(/[\r\n]+/g, ' '),
+        subject: subject.replace(/[\r\n]+/g, ' '),
         text,
       }),
     }).catch(() => null);
