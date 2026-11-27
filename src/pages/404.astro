@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import { defaultLocale, path, t } from '../i18n';
+
+const locale = defaultLocale;
+const d = t(locale);
+---
+
+<Base locale={locale} title={d.notFound.title}>
+  <section class="section">
+    <div class="container nf">
+      <span class="nf__code">404</span>
+      <h1>{d.notFound.title}</h1>
+      <p class="lead">{d.notFound.text}</p>
+      <a class="btn btn--primary" href={path(locale)}>{d.notFound.back}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    max-width: 620px;
+    text-align: center;
+  }
+  .nf__code {
+    display: block;
+    font-size: clamp(5rem, 14vw, 8rem);
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .nf .lead {
+    margin-bottom: 32px;
+  }
+</style>

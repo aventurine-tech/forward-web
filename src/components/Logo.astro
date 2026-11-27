@@ -1,0 +1,35 @@
+---
+// Forward International logo (vector redraw of the original, see src/data/logo.ts).
+// `light` keeps the blue square but sets the wordmark in white, for dark backgrounds.
+import { brandBlue, logoViewBox, markPath, wordPath } from '../data/logo';
+
+interface Props {
+  light?: boolean;
+  height?: number;
+}
+const { light = false, height = 44 } = Astro.props;
+---
+
+<span class="logo" style={`--h:${height}px`}>
+  <svg viewBox={logoViewBox} role="img" aria-label="Forward International">
+    <path fill={brandBlue} fill-rule="evenodd" d={markPath}></path>
+    <path fill={light ? '#ffffff' : brandBlue} d={wordPath}></path>
+  </svg>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+  }
+  .logo svg {
+    display: block;
+    height: var(--h);
+    width: auto;
+  }
+  @media (max-width: 480px) {
+    .logo svg {
+      height: calc(var(--h) * 0.85);
+    }
+  }
+</style>

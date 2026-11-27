@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro';
+import { localePaths, path, t, type Locale } from '../../i18n';
+
+export const getStaticPaths = localePaths;
+const { locale } = Astro.props as { locale: Locale };
+const d = t(locale);
+---
+
+<Base locale={locale} title={d.thanks.title}>
+  <section class="section">
+    <div class="container done">
+      <span class="done__icon" aria-hidden="true">✓</span>
+      <h1>{d.thanks.title}</h1>
+      <p class="lead">{d.thanks.text}</p>
+      <a class="btn btn--primary" href={path(locale)}>{d.thanks.back}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .done {
+    max-width: 620px;
+    text-align: center;
+    padding-block: 40px;
+  }
+  .done__icon {
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 800;
+  }
+  .done h1 {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+  }
+  .done .lead {
+    margin-bottom: 32px;
+  }
+</style>
