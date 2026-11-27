@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import { brands } from '../../data/brands';
+import { brands, categories } from '../../data/brands';
 import { asset, localePaths, t, type Locale } from '../../i18n';
 
 export const getStaticPaths = localePaths;
@@ -16,13 +16,26 @@ const b = d.brandsPage;
 
   <section class="section">
     <div class="container">
-      <h2 class="sub">{b.partnersTitle}</h2>
-      <ul class="logos">
+      <div class="head">
+        <h2 class="sub">{b.partnersTitle}</h2>
+        <div class="filter" role="group" aria-label={b.filterLabel} data-filter>
+          <button type="button" aria-pressed="true" data-cat="all">{b.filterAll} <span>{brands.length}</span></button>
+          {
+            categories.map((cat) => (
+              <button type="button" aria-pressed="false" data-cat={cat}>
+                {b.categories[cat]} <span>{brands.filter((br) => br.category === cat).length}</span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+      <ul class="logos" data-logos>
         {
           brands.map((br, i) => (
-            <li class="reveal" style={`--delay:${(i % 6) * 0.04}s`}>
+            <li class="reveal" style={`--delay:${(i % 6) * 0.04}s`} data-cat={br.category}>
               <img src={asset(br.logo)} alt="" loading="lazy" decoding="async" />
               <span>{br.name}</span>
+              <small>{b.categories[br.category]}</small>
             </li>
           ))
         }
@@ -50,12 +63,79 @@ const b = d.brandsPage;
   </section>
 
   <CtaBand locale={locale} />
+
+  <script>
+    const filter = document.querySelector<HTMLElement>('[data-filter]');
+    const items = document.querySelectorAll<HTMLElement>('[data-logos] li');
+    filter?.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-cat]');
+      if (!btn) return;
+      const cat = btn.dataset.cat;
+      filter.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      items.forEach((li) => {
+        li.hidden = cat !== 'all' && li.dataset.cat !== cat;
+        li.classList.add('is-visible');
+      });
+    });
+  </script>
 </Base>
 
 <style>
+  .head {
+    display: grid;
+    gap: 18px;
+    margin-bottom: 28px;
+  }
   .sub {
     font-size: 1.5rem;
-    margin-bottom: 28px;
+    margin: 0;
+  }
+  .filter {
+    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  :global(.js) .filter {
+    display: flex;
+  }
+  .filter button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .filter button span {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .filter button:hover {
+    border-color: var(--blue-100);
+    background: var(--blue-50);
+  }
+  .filter button[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+  .filter button[aria-pressed='true'] span {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .filter button:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 2px;
+  }
+  .logos li[hidden] {
+    display: none;
   }
   .logos {
     list-style: none;
@@ -67,9 +147,9 @@ const b = d.brandsPage;
   }
   .logos li {
     display: grid;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 1fr auto auto;
     gap: 12px;
-    height: 170px;
+    height: 186px;
     padding: 22px 18px 14px;
     background: #fff;
     border: 1px solid var(--line);
@@ -90,8 +170,13 @@ const b = d.brandsPage;
     align-self: center;
   }
   .logos span {
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .logos small {
+    margin-top: -8px;
+    font-size: 0.76rem;
     color: var(--muted);
   }
   .own {

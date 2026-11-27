@@ -1,0 +1,238 @@
+---
+// Map of Moldova with delivery routes from the Chișinău warehouse to towns in every region.
+// The towns are illustrative of national coverage, not a list of routes.
+import { company, t, type Locale } from '../i18n';
+import { mapView, outline, project } from '../data/moldova';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const c = t(locale).coverage;
+
+const towns: { ro: string; ru: string; lon: number; lat: number; label?: 'l' | 'r' }[] = [
+  { ro: 'Briceni', ru: 'Бричень', lon: 27.083, lat: 48.362 },
+  { ro: 'Edineț', ru: 'Единец', lon: 27.305, lat: 48.172, label: 'l' },
+  { ro: 'Soroca', ru: 'Сорока', lon: 28.298, lat: 48.156, label: 'r' },
+  { ro: 'Bălți', ru: 'Бельцы', lon: 27.929, lat: 47.762, label: 'r' },
+  { ro: 'Florești', ru: 'Флорешты', lon: 28.301, lat: 47.893 },
+  { ro: 'Ungheni', ru: 'Унгены', lon: 27.8, lat: 47.211, label: 'l' },
+  { ro: 'Orhei', ru: 'Оргеев', lon: 28.825, lat: 47.385, label: 'r' },
+  { ro: 'Hîncești', ru: 'Хынчешты', lon: 28.591, lat: 46.831 },
+  { ro: 'Căușeni', ru: 'Каушаны', lon: 29.407, lat: 46.644, label: 'r' },
+  { ro: 'Leova', ru: 'Леова', lon: 28.255, lat: 46.479 },
+  { ro: 'Comrat', ru: 'Комрат', lon: 28.657, lat: 46.298, label: 'r' },
+  { ro: 'Cahul', ru: 'Кагул', lon: 28.194, lat: 45.908, label: 'l' },
+];
+const [hx, hy] = project(company.geo.lon, company.geo.lat);
+const points = towns.map((tw) => {
+  const [x, y] = project(tw.lon, tw.lat);
+  // A gentle curve from the warehouse, bending to the right of the straight line.
+  const mx = (hx + x) / 2 + (y - hy) * 0.18;
+  const my = (hy + y) / 2 - (x - hx) * 0.18;
+  return { ...tw, name: locale === 'ru' ? tw.ru : tw.ro, x, y, route: `M${hx} ${hy}Q${mx} ${my} ${x} ${y}` };
+});
+---
+
+<section class="coverage" aria-labelledby="coverage-title">
+  <div class="container coverage__inner">
+    <div class="coverage__text reveal">
+      <span class="eyebrow">{c.eyebrow}</span>
+      <h2 id="coverage-title">{c.title}</h2>
+      <p class="lead">{c.lead}</p>
+      <ul>
+        {c.points.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+    <figure class="coverage__map reveal">
+      <svg viewBox={`-20 -10 ${mapView.width + 40} ${mapView.height + 20}`} role="img" aria-label={c.title}>
+        <path class="land" d={outline} />
+        <g class="routes">
+          {points.map((p, i) => <path d={p.route} style={`--i:${i}`} />)}
+        </g>
+        {
+          points.map((p, i) => (
+            <g class="town" style={`--i:${i}`}>
+              <circle cx={p.x} cy={p.y} r="4.5" />
+              {p.label && (
+                <text x={p.label === 'r' ? p.x + 9 : p.x - 9} y={p.y + 4} text-anchor={p.label === 'r' ? 'start' : 'end'}>
+                  {p.name}
+                </text>
+              )}
+            </g>
+          ))
+        }
+        <g class="hq">
+          <circle class="hq__pulse" cx={hx} cy={hy} r="10" />
+          <circle cx={hx} cy={hy} r="8" />
+          <text x={hx + 14} y={hy + 5}>{locale === 'ru' ? 'Кишинёв' : 'Chișinău'}</text>
+        </g>
+      </svg>
+      <figcaption><span class="dot"></span>{c.hq}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .coverage {
+    position: relative;
+    overflow: hidden;
+    background: var(--ink);
+    color: #fff;
+    padding-block: clamp(64px, 9vw, 120px);
+  }
+  .coverage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(700px 400px at 85% 40%, rgba(40, 142, 214, 0.28), transparent 70%);
+  }
+  .coverage__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+  }
+  .coverage .eyebrow {
+    color: #7cc0f0;
+  }
+  .coverage h2 {
+    color: #fff;
+    font-size: clamp(1.9rem, 3.4vw, 2.8rem);
+    margin: 0 0 18px;
+  }
+  .coverage .lead {
+    color: rgba(255, 255, 255, 0.78);
+  }
+  .coverage ul {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+  }
+  .coverage li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+  }
+  .coverage li::before {
+    content: '';
+    flex: none;
+    width: 22px;
+    height: 12px;
+    background: var(--blue);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 12'%3E%3Cpath d='M0 0h4l6 6-6 6H0l6-6zM10 0h4l6 6-6 6h-4l6-6z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 12'%3E%3Cpath d='M0 0h4l6 6-6 6H0l6-6zM10 0h4l6 6-6 6h-4l6-6z'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .coverage__map {
+    margin: 0;
+    justify-self: center;
+    width: min(100%, 460px);
+  }
+  .coverage__map svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .land {
+    fill: rgba(40, 142, 214, 0.14);
+    stroke: rgba(124, 192, 240, 0.7);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .routes path {
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-dasharray: 4 6;
+    opacity: 0.85;
+  }
+  .town circle {
+    fill: #fff;
+    stroke: var(--blue);
+    stroke-width: 2.5;
+  }
+  .town text,
+  .hq text {
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    fill: rgba(255, 255, 255, 0.85);
+  }
+  .hq circle {
+    fill: var(--blue);
+    stroke: #fff;
+    stroke-width: 3;
+  }
+  .hq text {
+    font-size: 15px;
+    font-weight: 800;
+    fill: #fff;
+  }
+  .hq__pulse {
+    fill: var(--blue) !important;
+    stroke: none !important;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  figcaption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--blue);
+    box-shadow: 0 0 0 3px #fff inset;
+    border: 2px solid var(--blue);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .routes path {
+      stroke-dashoffset: 0;
+      animation: flow 1.6s linear infinite;
+    }
+    :global(.js) .coverage__map:not(.is-visible) .routes path,
+    :global(.js) .coverage__map:not(.is-visible) .town {
+      opacity: 0;
+    }
+    .routes path,
+    .town {
+      transition: opacity 0.6s var(--ease) calc(0.3s + var(--i) * 0.07s);
+    }
+    .hq__pulse {
+      animation: pulse 2.4s var(--ease) infinite;
+    }
+  }
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -20;
+    }
+  }
+  @keyframes pulse {
+    from {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    to {
+      transform: scale(3);
+      opacity: 0;
+    }
+  }
+  @media (max-width: 860px) {
+    .coverage__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -24,6 +24,7 @@ const directions = `https://www.google.com/maps/dir/?api=1&destination=${lat},${
   <section class="section">
     <div class="container contact">
       <div class="contact__info">
+        <h2 class="visually-hidden">{d.nav.contact}</h2>
         <div class="info reveal">
           <span class="info__icon"><Icon name="pin" /></span>
           <div>
@@ -228,72 +229,6 @@ const directions = `https://www.google.com/maps/dir/?api=1&destination=${lat},${
     border-color: var(--blue);
     color: #fff;
   }
-  .form {
-    display: grid;
-    gap: 18px;
-    padding: clamp(24px, 4vw, 40px);
-    border-radius: 24px;
-    background: var(--bg-soft);
-    border: 1px solid var(--line);
-  }
-  .form h2 {
-    font-size: 1.7rem;
-    margin: 0 0 4px;
-  }
-  .form__row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-  }
-  .form label {
-    display: grid;
-    gap: 6px;
-    font-weight: 600;
-    font-size: 0.92rem;
-    color: var(--ink);
-  }
-  .form input,
-  .form textarea {
-    font: inherit;
-    font-weight: 400;
-    padding: 13px 15px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: #fff;
-    color: var(--text);
-    width: 100%;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .form input:focus,
-  .form textarea:focus {
-    outline: none;
-    border-color: var(--blue);
-    box-shadow: 0 0 0 4px rgba(40, 142, 214, 0.15);
-  }
-  .form .btn {
-    justify-self: start;
-  }
-  .form__note {
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin: 0;
-  }
-  .form__error {
-    margin: 0;
-    padding: 10px 14px;
-    border-radius: 10px;
-    background: #fdecea;
-    border: 1px solid #f5c2bd;
-    color: #8a1c13;
-    font-size: 0.95rem;
-  }
-  .hp {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-  }
   .map {
     margin-bottom: clamp(64px, 9vw, 120px);
     border-radius: 24px;
@@ -307,17 +242,11 @@ const directions = `https://www.google.com/maps/dir/?api=1&destination=${lat},${
     border: 0;
   }
   @media (max-width: 900px) {
-    .contact,
-    .form__row {
+    .contact {
       grid-template-columns: 1fr;
     }
     .map iframe {
       height: 300px;
-    }
-  }
-  @media (max-width: 480px) {
-    .form .btn {
-      justify-self: stretch;
     }
   }
 </style>
