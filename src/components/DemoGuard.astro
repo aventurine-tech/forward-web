@@ -1,0 +1,127 @@
+---
+// Demo protection for preview builds shown to the client before handover.
+// DEMO=1 shows a strip marking the site as a design proposal.
+// DEMO_PASSWORD=<word> also asks for that password before any page is shown. It is a deterrent
+// against casual copying and forwarded links, not real security: only a hash is in the page.
+import { createHash } from 'node:crypto';
+import type { Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const password = process.env.DEMO_PASSWORD?.trim();
+const demo = Boolean(process.env.DEMO) || Boolean(password);
+const hash = password ? createHash('sha256').update(password).digest('hex') : '';
+const text = {
+  ro: {
+    strip: 'Propunere de design realizată de Aventurine. Nu poate fi copiată sau reutilizată fără acordul nostru.',
+    title: 'Previzualizare privată',
+    lead: 'Introduceți parola primită pentru a vedea propunerea.',
+    field: 'Parolă',
+    go: 'Deschide',
+    wrong: 'Parolă greșită.',
+  },
+  en: {
+    strip: 'Design proposal by Aventurine. Not to be copied or reused without our consent.',
+    title: 'Private preview',
+    lead: 'Enter the password you were given to view the proposal.',
+    field: 'Password',
+    go: 'Open',
+    wrong: 'Wrong password.',
+  },
+  ru: {
+    strip: 'Дизайн-предложение от Aventurine. Копирование и использование без нашего согласия запрещено.',
+    title: 'Закрытый просмотр',
+    lead: 'Введите полученный пароль, чтобы увидеть предложение.',
+    field: 'Пароль',
+    go: 'Открыть',
+    wrong: 'Неверный пароль.',
+  },
+}[locale];
+---
+
+{demo && <div class="demo-strip" role="note">{text.strip}</div>}
+{
+  hash && (
+    <>
+      <style is:inline set:html={'html:not(.demo-ok) body > :not(.demo-gate){display:none!important}html.demo-ok .demo-gate{display:none}'} />
+      <script is:inline define:vars={{ hash }}>
+        try {
+          if (sessionStorage.getItem('demo') === hash) document.documentElement.classList.add('demo-ok');
+        } catch (e) {}
+      </script>
+      <form class="demo-gate" data-demo-gate>
+        <h1>{text.title}</h1>
+        <p>{text.lead}</p>
+        <label>
+          {text.field}
+          <input type="password" name="pw" autocomplete="off" required />
+        </label>
+        <p class="demo-gate__err" role="alert" hidden>{text.wrong}</p>
+        <button class="btn btn--primary" type="submit">{text.go}</button>
+      </form>
+      <script is:inline define:vars={{ hash }}>
+        var gate = document.querySelector('[data-demo-gate]');
+        gate.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var bytes = new TextEncoder().encode(gate.pw.value.trim());
+          crypto.subtle.digest('SHA-256', bytes).then(function (buf) {
+            var hex = Array.from(new Uint8Array(buf), function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+            if (hex === hash) {
+              try { sessionStorage.setItem('demo', hash); } catch (err) {}
+              document.documentElement.classList.add('demo-ok');
+            } else {
+              gate.querySelector('.demo-gate__err').hidden = false;
+            }
+          });
+        });
+      </script>
+    </>
+  )
+}
+
+<style>
+  .demo-strip {
+    position: relative;
+    z-index: 60;
+    padding: 8px 16px;
+    background: #0b1f33;
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-align: center;
+  }
+  .demo-gate {
+    max-width: 380px;
+    margin: 18vh auto 0;
+    padding: 0 16px;
+    display: grid;
+    gap: 14px;
+    text-align: center;
+  }
+  .demo-gate h1 {
+    font-size: 1.8rem;
+    margin: 0;
+  }
+  .demo-gate p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .demo-gate label {
+    display: grid;
+    gap: 6px;
+    text-align: left;
+    font-weight: 600;
+  }
+  .demo-gate input {
+    font: inherit;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .demo-gate__err {
+    color: #c0362c !important;
+    font-weight: 600;
+  }
+</style>
