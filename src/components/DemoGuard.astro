@@ -15,7 +15,7 @@ const demo = Boolean(process.env.DEMO) || Boolean(password);
 const hash = password ? createHash('sha256').update(password).digest('hex') : '';
 const text = {
   ro: {
-    strip: 'Propunere de design realizată de Aventurine. Nu poate fi copiată sau reutilizată fără acordul nostru.',
+    strip: 'Propunere de design realizată de Radu G',
     title: 'Previzualizare privată',
     lead: 'Introduceți parola primită pentru a vedea propunerea.',
     field: 'Parolă',
@@ -23,7 +23,7 @@ const text = {
     wrong: 'Parolă greșită.',
   },
   en: {
-    strip: 'Design proposal by Aventurine. Not to be copied or reused without our consent.',
+    strip: 'Design proposal by Radu G',
     title: 'Private preview',
     lead: 'Enter the password you were given to view the proposal.',
     field: 'Password',
@@ -31,7 +31,7 @@ const text = {
     wrong: 'Wrong password.',
   },
   ru: {
-    strip: 'Дизайн-предложение от Aventurine. Копирование и использование без нашего согласия запрещено.',
+    strip: 'Дизайн-предложение от Radu G',
     title: 'Закрытый просмотр',
     lead: 'Введите полученный пароль, чтобы увидеть предложение.',
     field: 'Пароль',
