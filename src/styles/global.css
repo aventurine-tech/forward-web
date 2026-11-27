@@ -1,0 +1,349 @@
+/* Forward International design tokens: the logo blue on clean white, with deep ink for contrast. */
+:root {
+  --blue: #288ed6;
+  --blue-600: #1d77ba;
+  --blue-700: #175f96;
+  --blue-50: #eaf4fc;
+  --blue-100: #d4e9f8;
+  --ink: #0c2135;
+  --ink-800: #12304c;
+  --text: #1b2b3a;
+  --muted: #5a6b7b;
+  --line: #e2e9f0;
+  --bg: #ffffff;
+  --bg-soft: #f3f7fb;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow: 0 1px 2px rgba(12, 33, 53, 0.04), 0 12px 32px rgba(12, 33, 53, 0.08);
+  --shadow-lg: 0 30px 60px -20px rgba(12, 33, 53, 0.28);
+  --container: 1200px;
+  --header-h: 76px;
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-feature-settings: 'cv11', 'ss01';
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  font-size: 1.0625rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg,
+picture {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--blue-600);
+}
+
+h1,
+h2,
+h3 {
+  color: var(--ink);
+  line-height: 1.12;
+  margin: 0 0 0.55em;
+  letter-spacing: -0.025em;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+h2 {
+  font-size: clamp(1.8rem, 3.6vw, 2.75rem);
+  font-weight: 800;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+.container {
+  width: min(100% - 32px, var(--container));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(64px, 9vw, 120px);
+}
+
+.section--soft {
+  background: var(--bg-soft);
+}
+
+.section__head {
+  max-width: 680px;
+  margin-bottom: clamp(32px, 4vw, 52px);
+}
+
+.section__head--row {
+  max-width: none;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.section__head--row > div {
+  max-width: 640px;
+}
+
+.section__head p,
+.lead {
+  color: var(--muted);
+  font-size: 1.125rem;
+}
+
+.section__head p:last-child {
+  margin-bottom: 0;
+}
+
+/* Small label above headings, led by the logo's double chevron. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blue-600);
+  margin-bottom: 16px;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 22px;
+  height: 12px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 12'%3E%3Cpath d='M0 0h4l6 6-6 6H0l6-6zM10 0h4l6 6-6 6h-4l6-6z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 12'%3E%3Cpath d='M0 0h4l6 6-6 6H0l6-6zM10 0h4l6 6-6 6h-4l6-6z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.25s var(--ease), color 0.25s, border-color 0.25s, transform 0.25s var(--ease), box-shadow 0.25s;
+  font-family: inherit;
+}
+
+.btn svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.25s var(--ease);
+}
+
+.btn:hover svg {
+  transform: translateX(3px);
+}
+
+.btn--primary {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 10px 24px -10px rgba(40, 142, 214, 0.8);
+}
+
+.btn--primary:hover {
+  background: var(--blue-600);
+  transform: translateY(-1px);
+}
+
+.btn--ghost {
+  border-color: var(--line);
+  color: var(--ink);
+  background: #fff;
+}
+
+.btn--ghost:hover {
+  border-color: var(--blue);
+  color: var(--blue-600);
+}
+
+.btn--light {
+  background: #fff;
+  color: var(--ink);
+}
+
+.btn--light:hover {
+  background: var(--blue-50);
+}
+
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--blue-600);
+}
+
+.link-arrow::after {
+  content: '→';
+  transition: transform 0.25s var(--ease);
+}
+
+.link-arrow:hover::after {
+  transform: translateX(4px);
+}
+
+.grid {
+  display: grid;
+  gap: 24px;
+}
+
+.grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+}
+
+.grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+}
+
+.grid--4 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 30px;
+}
+
+.card p:last-child {
+  margin-bottom: 0;
+}
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+  display: grid;
+  gap: 10px;
+}
+
+.checklist li {
+  padding-left: 32px;
+  position: relative;
+}
+
+.checklist li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--blue-50)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6 10.5l2.5 2.5L14 7.5' fill='none' stroke='%23288ed6' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / 100% no-repeat;
+}
+
+.photo {
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-soft);
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Fade-in on scroll (enabled by a small script in the layout). */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  transition-delay: var(--delay, 0s);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--blue-100);
+}
+
+@media (max-width: 560px) {
+  .card {
+    padding: 22px;
+  }
+  .btn {
+    padding: 14px 22px;
+  }
+}
