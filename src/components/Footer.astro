@@ -1,0 +1,143 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { company, path, t, tel, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const d = t(locale);
+const year = new Date().getFullYear();
+const links = [
+  { href: '/services', label: d.nav.services },
+  { href: '/brands', label: d.nav.brands },
+  { href: '/about', label: d.nav.about },
+  { href: '/contact', label: d.nav.contact },
+  { href: '/privacy', label: d.footer.privacy },
+];
+---
+
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <Logo light height={44} />
+      <p>{d.footer.tagline}</p>
+      <div class="footer__social">
+        <a href={company.facebook} target="_blank" rel="noopener" aria-label="Facebook"><Icon name="facebook" size={20} /></a>
+        <a href={company.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn"><Icon name="linkedin" size={20} /></a>
+      </div>
+    </div>
+    <nav aria-label={d.footer.pages}>
+      <h2>{d.footer.pages}</h2>
+      <ul>
+        {links.map((l) => <li><a href={path(locale, l.href)}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <div>
+      <h2>{d.footer.contact}</h2>
+      <ul class="footer__contact">
+        <li><Icon name="pin" size={18} /><span>{company.address[locale].slice(0, 2).join(', ')}</span></li>
+        <li><Icon name="phone" size={18} /><a href={tel(company.phone)}>{company.phone}</a></li>
+        <li><Icon name="mail" size={18} /><a href={`mailto:${company.email}`}>{company.email}</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <span>© {year} {company.legalName}. {d.footer.rights}</span>
+    <span>IDNO {company.idno}</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--ink);
+    color: rgba(255, 255, 255, 0.72);
+    padding: 72px 0 28px;
+    font-size: 0.98rem;
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.2fr;
+    gap: 48px;
+  }
+  .footer__brand p {
+    margin: 22px 0 20px;
+    max-width: 360px;
+  }
+  .footer h2 {
+    color: #fff;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .footer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .footer a {
+    color: rgba(255, 255, 255, 0.86);
+    text-decoration: none;
+  }
+  .footer a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .footer__contact li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .footer__contact :global(.icon) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--blue);
+  }
+  .footer__social {
+    display: flex;
+    gap: 10px;
+  }
+  .footer__social a {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .footer__social a:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+  .footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  @media (max-width: 860px) {
+    .footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 520px) {
+    .footer__grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+  }
+</style>

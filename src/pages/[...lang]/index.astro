@@ -1,0 +1,516 @@
+---
+import Base from '../../layouts/Base.astro';
+import Stats from '../../components/Stats.astro';
+import BrandMarquee from '../../components/BrandMarquee.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import Photo from '../../components/Photo.astro';
+import { localePaths, path, t, type Locale } from '../../i18n';
+
+export const getStaticPaths = localePaths;
+const { locale } = Astro.props as { locale: Locale };
+const d = t(locale);
+const h = d.home;
+// Split the title so its second sentence can be set in brand blue.
+const [titleA, ...titleRest] = h.title.split('. ');
+const titleB = titleRest.join('. ');
+const whyIcons = ['map', 'cold', 'team', 'quality'] as const;
+---
+
+<Base locale={locale}>
+  <section class="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="container hero__inner">
+      <div class="hero__text">
+        <span class="eyebrow">{h.eyebrow}</span>
+        <h1>{titleA}.{titleB && <> <span>{titleB}</span></>}</h1>
+        <p class="hero__lead">{h.lead}</p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href={path(locale, '/contact')}>
+            {h.primary}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--ghost" href={path(locale, '/services')}>{h.secondary}</a>
+        </div>
+        <p class="hero__badge"><Icon name="quality" size={20} /> {h.badge}</p>
+      </div>
+
+      <div class="hero__visual" aria-hidden="true">
+        <Photo name="warehouse" alt="" class="hero__photo" eager />
+        <div class="hero__mark">
+          <span class="hero__chev"></span>
+          <span class="hero__chev"></span>
+          <span class="hero__chev"></span>
+        </div>
+        <div class="hero__chip">
+          <strong>{d.stats[1].value}</strong>
+          <span>{d.stats[1].label}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Stats locale={locale} />
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head section__head--row">
+        <div>
+          <span class="eyebrow">{h.servicesEyebrow}</span>
+          <h2>{h.servicesTitle}</h2>
+          <p>{h.servicesLead}</p>
+        </div>
+        <a class="link-arrow" href={path(locale, '/services')}>{h.servicesLink}</a>
+      </div>
+      <div class="services">
+        {
+          d.services.map((s, i) => (
+            <a class="service reveal" style={`--delay:${i * 0.08}s`} href={path(locale, `/services#${s.id}`)}>
+              <span class="service__num">0{i + 1}</span>
+              <span class="service__icon"><Icon name={s.id as 'distribution'} size={28} /></span>
+              <h3>{s.title}</h3>
+              <p>{s.short}</p>
+              <span class="service__go" aria-hidden="true">→</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="container why">
+      <div class="why__media reveal">
+        <Photo name="fleet" alt={d.photos.fleet} />
+        <div class="why__tag"><Icon name="distribution" size={22} /> {d.stats[5].value} {d.stats[5].label}</div>
+      </div>
+      <div>
+        <span class="eyebrow">{h.whyEyebrow}</span>
+        <h2>{h.whyTitle}</h2>
+        <ul class="why__list">
+          {
+            h.why.map((w, i) => (
+              <li class="reveal" style={`--delay:${i * 0.08}s`}>
+                <span class="why__icon"><Icon name={whyIcons[i]} size={24} /></span>
+                <div>
+                  <h3>{w.title}</h3>
+                  <p>{w.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section brands-sec">
+    <div class="container">
+      <div class="section__head section__head--row">
+        <div>
+          <span class="eyebrow">{h.brandsEyebrow}</span>
+          <h2>{h.brandsTitle}</h2>
+          <p>{h.brandsLead}</p>
+        </div>
+        <a class="link-arrow" href={path(locale, '/brands')}>{h.brandsLink}</a>
+      </div>
+    </div>
+    <BrandMarquee />
+  </section>
+
+  <section class="section story-sec">
+    <div class="container">
+      <div class="story reveal">
+        <Photo name="city" alt={d.photos.city} class="story__photo" />
+        <div class="story__card">
+          <span class="eyebrow">{h.storyEyebrow}</span>
+          <h2>{h.storyTitle}</h2>
+          <p>{h.storyText}</p>
+          <a class="link-arrow" href={path(locale, '/about')}>{h.storyLink}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand locale={locale} />
+</Base>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(40px, 7vw, 96px) 0 clamp(56px, 8vw, 112px);
+  }
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(700px 420px at 85% 20%, rgba(40, 142, 214, 0.14), transparent 70%),
+      linear-gradient(180deg, var(--bg-soft), #fff 85%);
+  }
+  .hero__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    opacity: 0.55;
+    -webkit-mask: radial-gradient(900px 500px at 70% 30%, #000, transparent 75%);
+    mask: radial-gradient(900px 500px at 70% 30%, #000, transparent 75%);
+  }
+  .hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+  .hero h1 span {
+    color: var(--blue);
+  }
+  .hero__lead {
+    font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+    color: var(--muted);
+    max-width: 560px;
+    margin-bottom: 32px;
+  }
+  .hero__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 28px 0 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .hero__badge :global(.icon) {
+    color: var(--blue);
+  }
+
+  /* Hero visual: the logo's blue square with moving chevrons, two photos and a stat chip. */
+  .hero__visual {
+    position: relative;
+    aspect-ratio: 1 / 0.92;
+  }
+  .hero__visual :global(.hero__photo) {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 88%;
+    height: 84%;
+    border-radius: 28px;
+    box-shadow: var(--shadow-lg);
+  }
+  .hero__mark {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 36%;
+    aspect-ratio: 1;
+    border-radius: 26px;
+    background: var(--blue);
+    overflow: hidden;
+    border: 6px solid #fff;
+    box-shadow: var(--shadow-lg);
+  }
+  .hero__chev {
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    aspect-ratio: 141 / 153;
+    transform: translateY(-50%);
+    background: #fff;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 141 153'%3E%3Cpath d='M0 0h66l75 76.5L66 153H0l75-76.5z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 141 153'%3E%3Cpath d='M0 0h66l75 76.5L66 153H0l75-76.5z'/%3E%3C/svg%3E") center / contain no-repeat;
+    animation: chev 3.6s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+    left: -35%;
+  }
+  .hero__chev:nth-child(2) {
+    animation-delay: 1.2s;
+  }
+  .hero__chev:nth-child(3) {
+    animation-delay: 2.4s;
+  }
+  @keyframes chev {
+    0% {
+      left: -35%;
+      opacity: 0;
+    }
+    20%,
+    80% {
+      opacity: 1;
+    }
+    100% {
+      left: 105%;
+      opacity: 0;
+    }
+  }
+  /* Without motion, show the logo's two chevrons standing still. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero__chev {
+      animation: none;
+      opacity: 1;
+    }
+    .hero__chev:nth-child(1) {
+      left: 19%;
+    }
+    .hero__chev:nth-child(2) {
+      left: 50%;
+    }
+    .hero__chev:nth-child(3) {
+      display: none;
+    }
+  }
+  .hero__chip {
+    position: absolute;
+    right: 6%;
+    bottom: 4%;
+    display: grid;
+    gap: 2px;
+    padding: 16px 20px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: var(--shadow-lg);
+    max-width: 210px;
+    animation: float 6s ease-in-out infinite;
+  }
+  .hero__chip strong {
+    font-size: 1.9rem;
+    line-height: 1;
+    color: var(--blue);
+    letter-spacing: -0.03em;
+  }
+  .hero__chip span {
+    font-size: 0.88rem;
+    line-height: 1.3;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  @keyframes float {
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  /* Services */
+  .services {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .service {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 26px 26px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s;
+  }
+  .service:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+    border-color: var(--blue-100);
+  }
+  .service__num {
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+  .service__icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: var(--blue-50);
+    color: var(--blue);
+    margin-bottom: 22px;
+    transition: background 0.3s, color 0.3s;
+  }
+  .service:hover .service__icon {
+    background: var(--blue);
+    color: #fff;
+  }
+  .service p {
+    color: var(--muted);
+    font-size: 0.98rem;
+    flex: 1;
+  }
+  .service__go {
+    font-weight: 700;
+    color: var(--blue);
+    transition: transform 0.3s var(--ease);
+  }
+  .service:hover .service__go {
+    transform: translateX(6px);
+  }
+
+  /* Why */
+  .why {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+  }
+  .why__media {
+    position: relative;
+  }
+  .why__media :global(.photo) {
+    aspect-ratio: 4 / 3.4;
+    box-shadow: var(--shadow-lg);
+  }
+  .why__tag {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
+    box-shadow: var(--shadow);
+  }
+  .why__tag :global(.icon) {
+    color: var(--blue);
+  }
+  .why__list {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 22px;
+  }
+  .why__list li {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 18px;
+  }
+  .why__icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #fff;
+    color: var(--blue);
+    border: 1px solid var(--line);
+  }
+  .why__list h3 {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+  .why__list p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  /* Brands */
+  .brands-sec {
+    overflow: hidden;
+  }
+
+  /* Story */
+  .story-sec {
+    padding-top: 0;
+  }
+  .story {
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+    min-height: 480px;
+    display: flex;
+    align-items: flex-end;
+  }
+  .story :global(.story__photo) {
+    position: absolute;
+    inset: 0;
+    border-radius: 0;
+  }
+  .story::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(12, 33, 53, 0.55), rgba(12, 33, 53, 0.05) 70%);
+  }
+  .story__card {
+    position: relative;
+    z-index: 1;
+    margin: clamp(16px, 4vw, 48px);
+    max-width: 560px;
+    padding: clamp(26px, 4vw, 40px);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .story__card p {
+    color: var(--muted);
+  }
+
+  @media (max-width: 1100px) {
+    .services {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 900px) {
+    .hero__inner,
+    .why {
+      grid-template-columns: 1fr;
+    }
+    .hero__visual {
+      max-width: 560px;
+      width: 100%;
+      margin-inline: auto;
+    }
+  }
+  @media (max-width: 560px) {
+    .services {
+      grid-template-columns: 1fr;
+    }
+    .hero__actions .btn {
+      flex: 1 1 auto;
+    }
+    .hero__chip {
+      padding: 12px 14px;
+      max-width: 170px;
+    }
+    .hero__chip strong {
+      font-size: 1.5rem;
+    }
+    .story {
+      min-height: 0;
+      display: block;
+    }
+    .story :global(.story__photo) {
+      position: relative;
+      height: 220px;
+    }
+    .story::after {
+      display: none;
+    }
+    .story__card {
+      margin: 0;
+      border-radius: 0;
+      background: var(--bg-soft);
+    }
+  }
+</style>
