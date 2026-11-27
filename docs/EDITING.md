@@ -80,7 +80,11 @@ a design proposal by Radu G, and asks for a password before any page opens.
 
 - The password is the `DEMO_PASSWORD` key in Netlify (Keys and secrets). It is checked on
   Netlify's servers (`netlify/edge-functions/demo-gate.js`), so nothing is sent before it is
-  entered. A correct password is remembered for 7 days; changing it signs everyone out.
+  entered. A correct password is remembered for 7 days.
+- To change the password, edit `DEMO_PASSWORD` and then publish the site again: Netlify only
+  reads changed keys on the next deploy. Any change merged to `main` does this, or use the
+  redeploy option on the latest deploy in Netlify. After that, everyone has to enter the new
+  password.
 - Visits are listed in Netlify under Logs > Edge Functions > demo-gate. Each line has an
   anonymous `visitor` code (one per browser) and a `network` code (a scrambled form of the IP
   address), so unique visitors can be counted without storing addresses. Open
