@@ -12,6 +12,7 @@ const ro: Dictionary = {
     services: 'Servicii',
     about: 'Despre noi',
     brands: 'Branduri',
+    news: 'Noutăți',
     contact: 'Contacte',
     cta: 'Devino partener',
     menu: 'Meniu',
@@ -102,6 +103,15 @@ const ro: Dictionary = {
       points: ['Amenajare profesionistă a rafturilor', 'Promoții și degustări în magazine', 'Studii de piață și dezvoltarea brandurilor'],
     },
   ],
+  news: {
+    title: 'Noutăți',
+    lead: 'Viața la Forward: echipa, evenimentele, acțiunile caritabile și produsele noi, direct de pe paginile noastre de Facebook și Instagram.',
+    instagramTitle: 'Ultimele postări pe Instagram',
+    instagramFollow: 'Urmărește-ne pe Instagram',
+    facebookTitle: 'Pe Facebook',
+    facebookFollow: 'Deschide pagina de Facebook',
+    note: 'Postările sunt afișate de Instagram și Facebook, care pot seta propriile cookie-uri.',
+  },
   servicesPage: {
     title: 'Servicii',
     lead: 'Import, depozitare, transport și muncă la raft: tot ce are nevoie un brand ca să reușească pe piața din Moldova, de la un singur partener.',
@@ -215,6 +225,10 @@ const ro: Dictionary = {
       {
         title: 'Protecție anti-spam',
         text: 'Formularul este protejat de Cloudflare Turnstile, care poate procesa date tehnice despre browser pentru a deosebi oamenii de roboți.',
+      },
+      {
+        title: 'Postări din rețelele sociale',
+        text: 'Pagina Noutăți afișează postări de pe paginile noastre de Facebook și Instagram. Acestea sunt încărcate de la Meta (Facebook și Instagram), care poate procesa date despre vizita ta și seta cookie-uri conform propriei politici de confidențialitate.',
       },
       {
         title: 'Drepturile tale',

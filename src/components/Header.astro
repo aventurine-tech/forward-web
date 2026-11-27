@@ -13,6 +13,7 @@ const links = [
   { href: '/services', label: d.nav.services },
   { href: '/brands', label: d.nav.brands },
   { href: '/about', label: d.nav.about },
+  { href: '/news', label: d.nav.news },
   { href: '/contact', label: d.nav.contact },
 ];
 ---
@@ -113,6 +114,7 @@ const links = [
     font-size: 0.98rem;
     padding: 8px 14px;
     border-radius: 999px;
+    white-space: nowrap;
     transition: background 0.2s, color 0.2s;
   }
   .site-nav__links a:hover {
@@ -150,6 +152,7 @@ const links = [
   .site-nav__cta {
     padding: 11px 20px;
     font-size: 0.95rem;
+    white-space: nowrap;
   }
   .nav-toggle {
     display: none;
@@ -168,7 +171,7 @@ const links = [
     transition: transform 0.25s var(--ease), opacity 0.2s;
   }
 
-  @media (max-width: 1000px) {
+  @media (max-width: 1180px) {
     .nav-toggle {
       display: grid;
       place-content: center;

@@ -1,0 +1,165 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import { instagramPosts } from '../../data/instagram';
+import { company, localePaths, t, type Locale } from '../../i18n';
+
+export const getStaticPaths = localePaths;
+const { locale } = Astro.props as { locale: Locale };
+const d = t(locale);
+const n = d.news;
+// Facebook's Page Plugin shows the page's live timeline, so new posts appear on their own.
+const fbLocale = { ro: 'ro_RO', en: 'en_US', ru: 'ru_RU' }[locale];
+const fbSrc = `https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(company.facebook)}&tabs=timeline&width=500&height=900&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&locale=${fbLocale}`;
+---
+
+<Base locale={locale} title={n.title} description={n.lead}>
+  <PageHero eyebrow={d.nav.news} title={n.title} lead={n.lead}>
+    <div class="follow">
+      <a class="btn btn--primary" href={company.instagram} target="_blank" rel="noopener"><Icon name="instagram" size={20} /> {company.instagramHandle}</a>
+      <a class="btn btn--ghost" href={company.facebook} target="_blank" rel="noopener"><Icon name="facebook" size={20} /> Facebook</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container feed">
+      <div>
+        <div class="feed__head">
+          <h2>{n.instagramTitle}</h2>
+          <a class="link-arrow" href={company.instagram} target="_blank" rel="noopener">{n.instagramFollow}</a>
+        </div>
+        <div class="ig">
+          {
+            instagramPosts.map((code) => (
+              <blockquote
+                class="instagram-media"
+                data-instgrm-permalink={`https://www.instagram.com/p/${code}/`}
+                data-instgrm-version="14"
+              >
+                <a href={`https://www.instagram.com/p/${code}/`} target="_blank" rel="noopener">
+                  <Icon name="instagram" size={28} />
+                  <span>{n.instagramFollow}</span>
+                </a>
+              </blockquote>
+            ))
+          }
+        </div>
+      </div>
+
+      <aside class="fb">
+        <div class="feed__head">
+          <h2>{n.facebookTitle}</h2>
+        </div>
+        <div class="fb__frame">
+          <iframe title="Facebook" src={fbSrc} loading="lazy" allow="encrypted-media"></iframe>
+        </div>
+        <a class="link-arrow" href={company.facebook} target="_blank" rel="noopener">{n.facebookFollow}</a>
+      </aside>
+    </div>
+    <p class="container note">{n.note}</p>
+  </section>
+
+  <script is:inline async src="https://www.instagram.com/embed.js"></script>
+</Base>
+
+<style>
+  .follow {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+  .feed {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    gap: clamp(28px, 4vw, 48px);
+    align-items: start;
+  }
+  .feed__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .feed__head h2 {
+    font-size: 1.6rem;
+    margin: 0;
+  }
+  .ig {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    align-items: start;
+  }
+  /* Before Instagram's script swaps them for embeds, posts are plain link cards. */
+  .ig :global(blockquote.instagram-media) {
+    margin: 0 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    background: var(--bg-soft);
+    border: 1px solid var(--line) !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
+  }
+  .ig blockquote a {
+    display: grid;
+    place-items: center;
+    gap: 10px;
+    aspect-ratio: 4 / 5;
+    color: var(--blue-600);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .ig :global(iframe.instagram-media) {
+    margin: 0 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    border-radius: 18px !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: none !important;
+  }
+  .fb {
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+    display: grid;
+    gap: 16px;
+  }
+  .fb__frame {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--bg-soft);
+  }
+  .fb iframe {
+    display: block;
+    width: 100%;
+    height: 900px;
+    border: 0;
+  }
+  .note {
+    margin-top: 32px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  @media (max-width: 1000px) {
+    .feed {
+      grid-template-columns: 1fr;
+    }
+    .fb {
+      position: static;
+      max-width: 500px;
+    }
+    .fb iframe {
+      height: 640px;
+    }
+  }
+  @media (max-width: 560px) {
+    .ig {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

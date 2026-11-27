@@ -31,10 +31,11 @@ npm run preview  # serves dist/ locally
 | `/services` | Distribution, warehousing, transport, merchandising (each with an anchor) |
 | `/brands` | Partner brand logos and own brands |
 | `/about` | Story, motto, portfolio timeline, values, quality |
+| `/news` | Latest Instagram posts (`src/data/instagram.ts`) and the live Facebook timeline |
 | `/contact` | Office, phone, email, company details, contact form, map |
 | `/thanks`, `/privacy`, `/404` | Form confirmation, privacy, not found |
 
-Old forward.md addresses (`/ro/servicii/`, `/ro/contacts/`, `/ro/about/`, `/ro/news/` and their
+Old forward.md addresses (`/ro/servicii/`, `/ro/contacts/`, `/ro/about/`, and their
 EN/RU versions) redirect to the new pages (see `redirects` in `astro.config.mjs`).
 
 ## Content sources
@@ -50,6 +51,14 @@ the company's LinkedIn page. To check before launch:
   news post.
 - EN and RU copy were written fresh (the old EN/RU pages were mostly untranslated); have them
   reviewed by native speakers.
+
+## News page
+
+The Facebook column uses Facebook's Page Plugin, so new Facebook posts appear on their own.
+Instagram posts are listed by shortcode in `src/data/instagram.ts` and shown with Instagram's
+official embed. To update them automatically, the page owner needs to connect the Instagram
+account to a Meta app and provide a long-lived access token; a scheduled workflow can then
+refresh the list and redeploy.
 
 ## Contact form
 
