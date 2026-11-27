@@ -204,6 +204,7 @@ const en = {
       captcha: 'The anti-spam check failed. Please try again.',
       invalid: 'Please fill in all required fields with a valid email address.',
       error: 'Your message could not be sent. Please try again or email us directly.',
+      file: 'The CV must be a PDF, Word, JPG or PNG file of up to 5 MB.',
     },
   },
   coverage: {
@@ -237,7 +238,9 @@ const en = {
     phone: 'Phone',
     position: 'Job you are interested in',
     message: 'About you',
-    messageHint: 'Experience, the town you live in, when you could start. A link to your CV is welcome.',
+    messageHint: 'Experience, the town you live in, when you could start.',
+    cv: 'CV (optional)',
+    cvHint: 'PDF, Word or a photo (JPG, PNG), up to 5 MB.',
     send: 'Send application',
     note: 'We use your details only to consider your application, and delete them if we do not hire you.',
   },
@@ -263,7 +266,7 @@ const en = {
     sections: [
       {
         title: 'What we collect',
-        text: 'When you use the contact form we receive your name, email address, company (if given) and your message. We collect nothing else, and this site does not use advertising or tracking cookies.',
+        text: 'When you use the contact form we receive your name, email address, company (if given) and your message. With a job application we also receive your phone number (if given), the job you are interested in and your CV (if attached). We collect nothing else, and this site does not use advertising or tracking cookies.',
       },
       {
         title: 'How we use it',

@@ -37,7 +37,7 @@ npm run preview  # serves dist/ locally
 | `/brands` | Partner brand logos with a product-group filter, and own brands |
 | `/about` | Story, motto, portfolio timeline, values, quality |
 | `/news` | Latest Instagram posts (`src/data/instagram.json`) and the live Facebook timeline |
-| `/careers` | Why work at Forward, teams, job application form (same form worker, `kind=job`) |
+| `/careers` | Why work at Forward, teams, job application form with optional CV upload (same form worker, `kind=job`; the CV is emailed as an attachment) |
 | `/contact` | Office, phone, email, company details, contact form, map |
 | `/thanks`, `/privacy`, `/404` | Form confirmation, privacy, not found (thanks and 404 are `noindex`) |
 | `/sitemap.xml`, `/robots.txt` | Generated from `pages` in `src/i18n/index.ts` |

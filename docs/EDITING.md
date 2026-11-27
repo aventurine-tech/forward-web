@@ -69,7 +69,8 @@ Nothing to do: the News page shows the Facebook page's live timeline.
 ## Contact and job application forms
 
 Both forms send an email to the address set as `TO_EMAIL` in `form-worker/wrangler.toml`
-(info@forward.md). Job applications arrive with the subject "Candidatură de pe site". To send
+(info@forward.md). Job applications arrive with the subject "Candidatură de pe site" and, when the applicant
+adds one, their CV attached (PDF, Word, JPG or PNG, up to 5 MB). To send
 applications or messages somewhere else, change that address; the form worker redeploys by itself.
 
 ## Accounts the site depends on

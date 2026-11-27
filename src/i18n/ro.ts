@@ -205,6 +205,7 @@ const ro: Dictionary = {
       captcha: 'Verificarea anti-spam nu a reușit. Te rugăm să încerci din nou.',
       invalid: 'Te rugăm să completezi toate câmpurile obligatorii, cu o adresă de email validă.',
       error: 'Mesajul nu a putut fi trimis. Încearcă din nou sau scrie-ne direct pe email.',
+      file: 'CV-ul trebuie să fie un fișier PDF, Word, JPG sau PNG de până la 5 MB.',
     },
   },
   coverage: {
@@ -238,7 +239,9 @@ const ro: Dictionary = {
     phone: 'Telefon',
     position: 'Postul care te interesează',
     message: 'Despre tine',
-    messageHint: 'Experiența, localitatea în care locuiești, când ai putea începe. Un link la CV este binevenit.',
+    messageHint: 'Experiența, localitatea în care locuiești, când ai putea începe.',
+    cv: 'CV (opțional)',
+    cvHint: 'PDF, Word sau o fotografie (JPG, PNG), până la 5 MB.',
     send: 'Trimite candidatura',
     note: 'Folosim datele tale doar pentru a analiza candidatura și le ștergem dacă nu te angajăm.',
   },
@@ -264,7 +267,7 @@ const ro: Dictionary = {
     sections: [
       {
         title: 'Ce date colectăm',
-        text: 'Când folosești formularul de contact primim numele, adresa de email, compania (dacă o indici) și mesajul tău. Nu colectăm nimic altceva, iar site-ul nu folosește cookie-uri de publicitate sau urmărire.',
+        text: 'Când folosești formularul de contact primim numele, adresa de email, compania (dacă o indici) și mesajul tău. Pentru o candidatură primim și numărul de telefon (dacă îl indici), postul dorit și CV-ul (dacă îl atașezi). Nu colectăm nimic altceva, iar site-ul nu folosește cookie-uri de publicitate sau urmărire.',
       },
       {
         title: 'Cum le folosim',
