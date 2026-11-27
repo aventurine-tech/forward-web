@@ -57,18 +57,34 @@ the company's LinkedIn page. To check before launch:
 The Facebook section uses Facebook's Page Plugin, so new Facebook posts appear on their own.
 
 The Instagram grid is drawn by the site itself, so the page loads nothing from Instagram.
-To add a post:
+Posts are in `src/data/instagram.json` and their pictures in `public/instagram/`.
+
+### Automatic updates (daily)
+
+`.github/workflows/instagram-sync.yml` runs every day at 05:17 UTC, pulls the 6 latest posts
+through the Instagram API, commits them and redeploys the site. It can also be started by hand
+under Actions > Sync Instagram posts > Run workflow. It needs one secret:
+
+1. The Instagram account must be a **Business** or **Creator** account (Instagram app >
+   Settings > Account type and tools).
+2. At [developers.facebook.com](https://developers.facebook.com/apps) create an app of type
+   **Business** and add the **Instagram** product, then choose "API setup with Instagram login".
+3. Under "Generate access tokens", add the Forward Instagram account and log in with it. Copy
+   the token it shows (a long-lived token, valid 60 days).
+4. In GitHub, add it as the repository secret `INSTAGRAM_TOKEN` (Settings > Secrets and
+   variables > Actions > New repository secret).
+
+The job refreshes the token on every run, so it keeps working as long as it runs at least once
+every 60 days. Without the secret the job does nothing and the current posts stay.
+
+### Adding a post by hand
 
 1. Add its shortcode, date, whether it is a video, and caption to `src/data/instagram.json`
    (newest first).
 2. Add a line `<shortcode> <picture URL>` to `scripts/instagram-images.txt`. The picture URL
    is the post's `og:image`, which a browser shows in the page source of the post.
-3. Push. The "Save Instagram pictures" workflow saves the picture to `public/instagram/` and
-   commits it. Posts without a picture are left out of the grid.
-
-To update the grid automatically, the account owner needs to connect the Instagram account to
-a Meta app and provide a long-lived access token; a scheduled workflow can then refresh both
-files and redeploy.
+3. Push. The "Save Instagram pictures" workflow saves the picture to `public/instagram/`.
+   Posts without a picture are left out of the grid.
 
 ## Contact form
 
