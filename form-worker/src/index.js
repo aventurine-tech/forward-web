@@ -4,6 +4,9 @@
 // drop honeypot hits, email the message to the office and redirect back to the site.
 
 const LOCALES = { ro: '', en: '/en', ru: '/ru' };
+// CVs sent with job applications: PDF, Word or a photo, up to 5 MB (Resend allows 40 MB per email).
+const CV_TYPES = { pdf: 'application/pdf', doc: 'application/msword', docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png' };
+const CV_MAX = 5 * 1024 * 1024;
 const LIMITS = { firstName: 80, lastName: 80, email: 200, company: 160, phone: 40, position: 120, message: 5000 };
 
 export default {
@@ -45,11 +48,25 @@ export default {
       return fail('invalid');
     }
 
+    // Optional CV upload (job applications only).
+    const attachments = [];
+    const cv = job ? form.get('cv') : null;
+    if (cv && typeof cv === 'object' && cv.size > 0) {
+      const ext = String(cv.name).split('.').pop().toLowerCase();
+      if (!CV_TYPES[ext] || cv.size > CV_MAX) return fail('file');
+      const bytes = new Uint8Array(await cv.arrayBuffer());
+      let bin = '';
+      for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+      const safe = `${f.firstName}-${f.lastName}`.normalize('NFKD').replace(/[^\w-]+/g, '').slice(0, 60) || 'candidat';
+      attachments.push({ filename: `CV-${safe}.${ext}`, content: btoa(bin) });
+    }
+
     const text = [
       `Nume: ${f.firstName} ${f.lastName}`,
       `Email: ${f.email}`,
       job ? `Telefon: ${f.phone || '-'}` : `Companie: ${f.company || '-'}`,
       ...(job ? [`Post: ${f.position || '-'}`] : []),
+      ...(job ? [`CV: ${attachments.length ? 'atașat' : 'nu a fost trimis'}`] : []),
       `Limba site-ului: ${form.get('lang') || 'ro'}`,
       '',
       f.message,
@@ -67,6 +84,7 @@ export default {
         reply_to: f.email,
         subject: subject.replace(/[\r\n]+/g, ' '),
         text,
+        ...(attachments.length ? { attachments } : {}),
       }),
     }).catch(() => null);
     if (!sent || !sent.ok) return fail('error');
