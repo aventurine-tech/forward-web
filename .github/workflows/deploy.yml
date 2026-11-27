@@ -50,8 +50,11 @@ jobs:
         with:
           path: dist
 
+  # Only main may publish: the github-pages environment rejects other branches.
+  # Pushes to the working branch still run the build as a check.
   deploy:
     needs: build
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
