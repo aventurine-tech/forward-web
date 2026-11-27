@@ -73,6 +73,16 @@ Both forms send an email to the address set as `TO_EMAIL` in `form-worker/wrangl
 adds one, their CV attached (PDF, Word, JPG or PNG, up to 5 MB). To send
 applications or messages somewhere else, change that address; the form worker redeploys by itself.
 
+## Demo protection on Netlify
+
+While the site is shown as a proposal, the Netlify version has a strip at the top marking it as
+an Aventurine design proposal, and asks for a password before any page opens.
+
+- The password is the `DEMO_PASSWORD` key in Netlify (Keys and secrets). After changing it,
+  run a new deploy (Deploys > Trigger deploy), because keys only apply from the next build.
+- At handover, delete `DEMO_PASSWORD` in Netlify and remove the `DEMO = "1"` line from
+  `netlify.toml`, then deploy again. The strip and the password page disappear.
+
 ## Accounts the site depends on
 
 | Service | What it does | Who should own it |
