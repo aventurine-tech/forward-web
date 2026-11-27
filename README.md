@@ -48,8 +48,9 @@ articles (`/ro/news/newsdetalii/…`) land on the 404 page, which forwards them 
 
 ## Search engines
 
-While the site runs on the GitHub Pages preview (`*.github.io`), every page carries
-`noindex` and `robots.txt` disallows crawling, so the preview never competes with forward.md.
+While the site runs as a preview (`*.netlify.app`, or any build with `PREVIEW=1`, which
+`netlify.toml` sets), every page carries `noindex` and `robots.txt` disallows crawling, so the
+preview never competes with forward.md.
 Both switch to indexable automatically once the site is built for the real domain. After the
 switch, submit `https://www.forward.md/sitemap.xml` in Google Search Console.
 
@@ -124,7 +125,13 @@ separately or as `NAME: value` lines in one `FORWARD_FORME` secret / `FORWARD_FO
 | Variable | `TURNSTILE_SITE_KEY` | Turnstile widget site key |
 | Variable | `FORM_ENDPOINT` | The worker URL, e.g. `https://forward-form.<subdomain>.workers.dev` |
 
+The site itself is built by Netlify, so also add `PUBLIC_FORM_ENDPOINT` (the worker URL) and
+`PUBLIC_TURNSTILE_SITE_KEY` in Netlify under Keys and secrets, then redeploy.
+
 ## Deploying
 
-`.github/workflows/deploy.yml` builds the site and publishes it to GitHub Pages on every push.
-To serve it at forward.md, add the domain under Settings > Pages and point DNS at GitHub Pages.
+Netlify builds and publishes the site on every push to `main` (settings in `netlify.toml`).
+`.github/workflows/check.yml` only checks that the site builds. While it is a demo, the
+`DEMO_PASSWORD` key in Netlify keeps it behind a password (`netlify/edge-functions/demo-gate.js`).
+To serve it at forward.md: add the domain in Netlify under Domain management, point DNS at
+Netlify, remove `PREVIEW` and `DEMO` from `netlify.toml` and delete `DEMO_PASSWORD`.

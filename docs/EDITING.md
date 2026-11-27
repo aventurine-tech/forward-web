@@ -10,9 +10,9 @@ the `main` branch, the site rebuilds and goes live by itself in about two minute
 2. Click the pencil icon ("Edit this file").
 3. Make the change. Keep quotes, commas and brackets exactly as they are around your text.
 4. Click **Commit changes**, write a short note such as "Update phone number", and confirm.
-5. Open the **Actions** tab to watch the build. A green tick means the change is live. A red
-   cross means something in the file is broken (often a missing quote or comma). The live site
-   stays as it was; open the failed run to see which line is wrong, fix it and commit again.
+5. Open the **Actions** tab to watch the check. A green tick means the change is fine and
+   Netlify publishes it within a couple of minutes. A red cross means something in the file is
+   broken (often a missing quote or comma). The live site stays as it was; open the failed run to see which line is wrong, fix it and commit again.
 
 ## Common changes
 
@@ -88,7 +88,8 @@ a design proposal by Radu G, and asks for a password before any page opens.
 
 | Service | What it does | Who should own it |
 | --- | --- | --- |
-| GitHub | Code, builds and hosting (GitHub Pages) | Forward's own GitHub organisation |
+| GitHub | Code and build checks | Forward's own GitHub organisation |
+| Netlify | Builds and hosts the site | Forward |
 | Cloudflare | Form worker and anti-spam check (Turnstile) | Forward |
 | Resend | Sends the form emails from website@forward.md | Forward |
 | Meta developer app | Instagram token for the daily sync | Whoever manages the Instagram account |
