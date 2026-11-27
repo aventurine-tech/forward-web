@@ -54,11 +54,21 @@ the company's LinkedIn page. To check before launch:
 
 ## News page
 
-The Facebook column uses Facebook's Page Plugin, so new Facebook posts appear on their own.
-Instagram posts are listed by shortcode in `src/data/instagram.ts` and shown with Instagram's
-official embed. To update them automatically, the page owner needs to connect the Instagram
-account to a Meta app and provide a long-lived access token; a scheduled workflow can then
-refresh the list and redeploy.
+The Facebook section uses Facebook's Page Plugin, so new Facebook posts appear on their own.
+
+The Instagram grid is drawn by the site itself, so the page loads nothing from Instagram.
+To add a post:
+
+1. Add its shortcode, date, whether it is a video, and caption to `src/data/instagram.json`
+   (newest first).
+2. Add a line `<shortcode> <picture URL>` to `scripts/instagram-images.txt`. The picture URL
+   is the post's `og:image`, which a browser shows in the page source of the post.
+3. Push. The "Save Instagram pictures" workflow saves the picture to `public/instagram/` and
+   commits it. Posts without a picture are left out of the grid.
+
+To update the grid automatically, the account owner needs to connect the Instagram account to
+a Meta app and provide a long-lived access token; a scheduled workflow can then refresh both
+files and redeploy.
 
 ## Contact form
 

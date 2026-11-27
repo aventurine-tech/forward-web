@@ -1,17 +1,33 @@
 ---
+import { existsSync } from 'node:fs';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Icon from '../../components/Icon.astro';
-import { instagramPosts } from '../../data/instagram';
-import { company, localePaths, t, type Locale } from '../../i18n';
+import posts from '../../data/instagram.json';
+import { asset, company, localePaths, t, type Locale } from '../../i18n';
 
 export const getStaticPaths = localePaths;
 const { locale } = Astro.props as { locale: Locale };
 const d = t(locale);
 const n = d.news;
+
+// Pictures and captions are downloaded by .github/workflows/instagram.yml, so the grid
+// loads nothing from Instagram. Posts whose picture is missing are left out.
+const dateFmt = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+const grid = posts
+  .filter((p) => existsSync(`public/instagram/${p.code}.jpg`))
+  .map((p) => ({
+    ...p,
+    url: `https://www.instagram.com/p/${p.code}/`,
+    img: asset(`/instagram/${p.code}.jpg`),
+    when: dateFmt.format(new Date(p.date)),
+    // First paragraph only, without hashtags.
+    text: p.caption.split(/\n\s*\n/)[0].replace(/#\S+/g, '').trim(),
+  }));
+
 // Facebook's Page Plugin shows the page's live timeline, so new posts appear on their own.
 const fbLocale = { ro: 'ro_RO', en: 'en_US', ru: 'ru_RU' }[locale];
-const fbSrc = `https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(company.facebook)}&tabs=timeline&width=500&height=900&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&locale=${fbLocale}`;
+const fbSrc = `https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(company.facebook)}&tabs=timeline&width=500&height=640&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&locale=${fbLocale}`;
 ---
 
 <Base locale={locale} title={n.title} description={n.lead}>
@@ -22,45 +38,53 @@ const fbSrc = `https://www.facebook.com/plugins/page.php?href=${encodeURICompone
     </div>
   </PageHero>
 
-  <section class="section">
-    <div class="container feed">
-      <div>
-        <div class="feed__head">
-          <h2>{n.instagramTitle}</h2>
-          <a class="link-arrow" href={company.instagram} target="_blank" rel="noopener">{n.instagramFollow}</a>
-        </div>
-        <div class="ig">
-          {
-            instagramPosts.map((code) => (
-              <blockquote
-                class="instagram-media"
-                data-instgrm-permalink={`https://www.instagram.com/p/${code}/`}
-                data-instgrm-version="14"
-              >
-                <a href={`https://www.instagram.com/p/${code}/`} target="_blank" rel="noopener">
-                  <Icon name="instagram" size={28} />
-                  <span>{n.instagramFollow}</span>
+  {
+    grid.length > 0 && (
+      <section class="section">
+        <div class="container">
+          <div class="feed__head">
+            <h2>{n.instagramTitle}</h2>
+            <a class="link-arrow" href={company.instagram} target="_blank" rel="noopener">
+              {n.instagramFollow}
+            </a>
+          </div>
+          <ul class="ig">
+            {grid.map((p) => (
+              <li class="post reveal">
+                <a href={p.url} target="_blank" rel="noopener" aria-label={`${n.watch}: ${p.when}`}>
+                  <span class="post__media">
+                    <img src={p.img} alt="" loading="lazy" decoding="async" width="640" height="640" />
+                    <span class="post__badge">
+                      <Icon name="instagram" size={18} />
+                    </span>
+                  </span>
+                  <span class="post__body">
+                    <time datetime={p.date}>{p.when}</time>
+                    {p.text && <span class="post__text">{p.text}</span>}
+                  </span>
                 </a>
-              </blockquote>
-            ))
-          }
+              </li>
+            ))}
+          </ul>
         </div>
+      </section>
+    )
+  }
+
+  <section class="section section--soft">
+    <div class="container fb">
+      <div class="fb__intro">
+        <span class="fb__icon"><Icon name="facebook" size={28} /></span>
+        <h2>{n.facebookTitle}</h2>
+        <p>{n.facebookText}</p>
+        <a class="btn btn--ghost" href={company.facebook} target="_blank" rel="noopener">{n.facebookFollow}</a>
+        <p class="note">{n.note}</p>
       </div>
-
-      <aside class="fb">
-        <div class="feed__head">
-          <h2>{n.facebookTitle}</h2>
-        </div>
-        <div class="fb__frame">
-          <iframe title="Facebook" src={fbSrc} loading="lazy" allow="encrypted-media"></iframe>
-        </div>
-        <a class="link-arrow" href={company.facebook} target="_blank" rel="noopener">{n.facebookFollow}</a>
-      </aside>
+      <div class="fb__frame">
+        <iframe title="Facebook" src={fbSrc} loading="lazy" allow="encrypted-media"></iframe>
+      </div>
     </div>
-    <p class="container note">{n.note}</p>
   </section>
-
-  <script is:inline async src="https://www.instagram.com/embed.js"></script>
 </Base>
 
 <style>
@@ -70,96 +94,151 @@ const fbSrc = `https://www.facebook.com/plugins/page.php?href=${encodeURICompone
     flex-wrap: wrap;
     margin-top: 28px;
   }
-  .feed {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 400px;
-    gap: clamp(28px, 4vw, 48px);
-    align-items: start;
-  }
   .feed__head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 16px;
     flex-wrap: wrap;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
-  .feed__head h2 {
-    font-size: 1.6rem;
+  .feed__head h2,
+  .fb h2 {
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
     margin: 0;
   }
   .ig {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    align-items: start;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(16px, 2.4vw, 28px);
   }
-  /* Before Instagram's script swaps them for embeds, posts are plain link cards. */
-  .ig :global(blockquote.instagram-media) {
-    margin: 0 !important;
-    min-width: 0 !important;
-    width: 100% !important;
-    max-width: none !important;
+  .post a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s;
+  }
+  .post a:hover {
+    transform: translateY(-4px);
+    border-color: transparent;
+    box-shadow: 0 24px 48px -28px rgba(12, 33, 53, 0.45);
+  }
+  .post__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
     background: var(--bg-soft);
-    border: 1px solid var(--line) !important;
-    border-radius: 18px !important;
-    box-shadow: none !important;
   }
-  .ig blockquote a {
+  .post__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease);
+  }
+  .post a:hover img {
+    transform: scale(1.04);
+  }
+  .post__badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
     display: grid;
     place-items: center;
-    gap: 10px;
-    aspect-ratio: 4 / 5;
-    color: var(--blue-600);
-    font-weight: 600;
-    text-decoration: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #fff;
+    background: rgba(12, 33, 53, 0.55);
+    backdrop-filter: blur(6px);
   }
-  .ig :global(iframe.instagram-media) {
-    margin: 0 !important;
-    min-width: 0 !important;
-    width: 100% !important;
-    border-radius: 18px !important;
-    border: 1px solid var(--line) !important;
-    box-shadow: none !important;
+  .post__body {
+    display: grid;
+    gap: 8px;
+    padding: 18px 20px 22px;
+  }
+  .post__body time {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--blue-600);
+  }
+  .post__text {
+    color: var(--ink);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .fb {
-    position: sticky;
-    top: calc(var(--header-h) + 24px);
     display: grid;
-    gap: 16px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 500px);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+  }
+  .fb__intro {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+    max-width: 440px;
+  }
+  .fb__intro p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+  .fb__icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    color: #fff;
+    background: var(--blue-600);
+  }
+  .fb__intro .note {
+    font-size: 0.85rem;
   }
   .fb__frame {
-    border-radius: 18px;
+    border-radius: 20px;
     overflow: hidden;
+    background: #fff;
     border: 1px solid var(--line);
-    background: var(--bg-soft);
+    box-shadow: 0 30px 60px -40px rgba(12, 33, 53, 0.5);
   }
   .fb iframe {
     display: block;
     width: 100%;
-    height: 900px;
+    height: 640px;
     border: 0;
   }
-  .note {
-    margin-top: 32px;
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
   @media (max-width: 1000px) {
-    .feed {
-      grid-template-columns: 1fr;
+    .ig {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .fb {
-      position: static;
-      max-width: 500px;
+      grid-template-columns: 1fr;
     }
-    .fb iframe {
-      height: 640px;
+    .fb__frame {
+      max-width: 500px;
     }
   }
   @media (max-width: 560px) {
     .ig {
       grid-template-columns: 1fr;
+    }
+    .fb iframe {
+      height: 560px;
     }
   }
 </style>
