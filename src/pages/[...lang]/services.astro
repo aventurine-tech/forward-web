@@ -1,0 +1,150 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import Photo from '../../components/Photo.astro';
+import { localePaths, t, type Locale } from '../../i18n';
+
+export const getStaticPaths = localePaths;
+const { locale } = Astro.props as { locale: Locale };
+const d = t(locale);
+// Real photos where we have them; the other services get an illustrated panel.
+const photos: Record<string, 'fleet' | 'warehouse' | undefined> = { distribution: 'fleet', storage: 'warehouse' };
+---
+
+<Base locale={locale} title={d.servicesPage.title} description={d.servicesPage.lead}>
+  <PageHero eyebrow={d.home.servicesEyebrow} title={d.servicesPage.title} lead={d.servicesPage.lead}>
+    <nav class="jump" aria-label={d.servicesPage.title}>
+      {d.services.map((s) => <a href={`#${s.id}`}><Icon name={s.id as 'distribution'} size={18} />{s.title}</a>)}
+    </nav>
+  </PageHero>
+
+  <section class="section">
+    <div class="container rows">
+      {
+        d.services.map((s, i) => {
+          const photo = photos[s.id];
+          return (
+            <article id={s.id} class:list={['row', { 'row--flip': i % 2 === 1 }]}>
+              <div class="row__media reveal">
+                {photo ? (
+                  <Photo name={photo} alt={d.photos[photo]} />
+                ) : (
+                  <div class="row__art" aria-hidden="true">
+                    <Icon name={s.id as 'distribution'} size={96} />
+                    <span class="row__art-chev" />
+                  </div>
+                )}
+              </div>
+              <div class="row__text reveal" style="--delay:.1s">
+                <span class="row__num">0{i + 1}</span>
+                <h2>{s.title}</h2>
+                <p>{s.text}</p>
+                <ul class="checklist">
+                  {s.points.map((p) => <li>{p}</li>)}
+                </ul>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+  </section>
+
+  <CtaBand locale={locale} />
+</Base>
+
+<style>
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 32px;
+  }
+  .jump a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .jump a:hover {
+    border-color: var(--blue);
+    color: var(--blue-600);
+  }
+  .jump :global(.icon) {
+    color: var(--blue);
+  }
+  .rows {
+    display: grid;
+    gap: clamp(56px, 8vw, 104px);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+  .row--flip .row__media {
+    order: 2;
+  }
+  .row__media :global(.photo),
+  .row__art {
+    aspect-ratio: 4 / 3;
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+  }
+  .row__art {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue), var(--blue-700));
+  }
+  .row__art :global(.icon) {
+    position: relative;
+    z-index: 1;
+    stroke-width: 1.2;
+  }
+  .row__art-chev {
+    position: absolute;
+    right: -10%;
+    top: 50%;
+    width: 70%;
+    aspect-ratio: 270 / 153;
+    transform: translateY(-50%);
+    background: #fff;
+    opacity: 0.1;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 270 153'%3E%3Cpath d='M0 0h66l75 76.5L66 153H0l75-76.5zM129 0h66l75 76.5-75 76.5h-66l75-76.5z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 270 153'%3E%3Cpath d='M0 0h66l75 76.5L66 153H0l75-76.5zM129 0h66l75 76.5-75 76.5h-66l75-76.5z'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .row__num {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--blue);
+    margin-bottom: 10px;
+  }
+  .row__text p {
+    color: var(--muted);
+    font-size: 1.08rem;
+  }
+  @media (max-width: 860px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+    .row--flip .row__media {
+      order: 0;
+    }
+  }
+</style>

@@ -1,0 +1,26 @@
+// Partner brands, in the order the old forward.md listed them. Logos were copied from
+// that site into public/brands/ (see scripts/legacy-assets.txt).
+export const brands = [
+  { name: 'National', logo: 'brands/national.png' },
+  { name: 'Bonduelle', logo: 'brands/bonduelle.png' },
+  { name: 'Gold Drop', logo: 'brands/golddrop.png' },
+  { name: 'Farm Frites', logo: 'brands/farmfrites.png' },
+  { name: 'Silk', logo: 'brands/silk.png' },
+  { name: 'Riso Scotti', logo: 'brands/scotti.png' },
+  { name: 'Figo', logo: 'brands/figo.png' },
+  { name: 'Tedi', logo: 'brands/tedi.png' },
+  { name: 'Băneasa', logo: 'brands/baneasa.jpg' },
+  { name: 'Sadu', logo: 'brands/sadu.png' },
+  { name: 'Kamis', logo: 'brands/kamis.png' },
+  { name: 'Dr. Oetker', logo: 'brands/droetker.gif' },
+  { name: 'Oleina', logo: 'brands/oleina.png' },
+  { name: 'Tymbark', logo: 'brands/tymbark.png' },
+  { name: 'Hochland', logo: 'brands/hochland.png' },
+  { name: 'Limo', logo: 'brands/limo.png' },
+  { name: 'Scandia Food', logo: 'brands/scandiafood.png' },
+  { name: 'Yasno Solnyshko', logo: 'brands/yasnosolnyshko.png' },
+  { name: 'Croco', logo: 'brands/croco.png' },
+  { name: 'Aladushkin', logo: 'brands/aladushkin.png' },
+  { name: 'Algida', logo: 'brands/algida.png' },
+  { name: 'Lux Menu', logo: 'brands/luxmenu.png' },
+];

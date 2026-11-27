@@ -1,0 +1,79 @@
+---
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const stats = t(locale).stats;
+---
+
+<section class="stats" aria-label="Forward International">
+  <div class="container">
+    <ul class="stats__grid">
+      {
+        stats.map((s, i) => (
+          <li class="reveal" style={`--delay:${i * 0.06}s`}>
+            <strong>{s.value}</strong>
+            <span>{s.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .stats {
+    background: var(--ink);
+    color: #fff;
+    padding-block: clamp(44px, 6vw, 72px);
+    position: relative;
+    overflow: hidden;
+  }
+  .stats::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(600px 300px at 10% 0%, rgba(40, 142, 214, 0.35), transparent 70%),
+      radial-gradient(500px 300px at 95% 100%, rgba(40, 142, 214, 0.22), transparent 70%);
+  }
+  .stats__grid {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px;
+  }
+  .stats li {
+    display: grid;
+    gap: 6px;
+    align-content: start;
+    padding-left: 18px;
+    border-left: 2px solid rgba(40, 142, 214, 0.55);
+  }
+  .stats strong {
+    font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .stats span {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+  @media (max-width: 1000px) {
+    .stats__grid {
+      grid-template-columns: repeat(3, 1fr);
+      row-gap: 36px;
+    }
+  }
+  @media (max-width: 520px) {
+    .stats__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

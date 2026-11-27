@@ -1,0 +1,95 @@
+---
+// Two rows of partner logos scrolling in opposite directions (static when motion is reduced).
+import { brands } from '../data/brands';
+import { asset } from '../i18n';
+
+const half = Math.ceil(brands.length / 2);
+const rows = [brands.slice(0, half), brands.slice(half)];
+---
+
+<div class="marquee" aria-label={brands.map((b) => b.name).join(', ')}>
+  {
+    rows.map((row, r) => (
+      <div class:list={['marquee__row', { 'marquee__row--rev': r === 1 }]} aria-hidden="true">
+        {[0, 1].map(() => (
+          <ul>
+            {row.map((b) => (
+              <li>
+                <img src={asset(b.logo)} alt={b.name} loading="lazy" decoding="async" />
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .marquee {
+    display: grid;
+    gap: 18px;
+    -webkit-mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee__row {
+    display: flex;
+    overflow: hidden;
+  }
+  .marquee ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 9px;
+    display: flex;
+    gap: 18px;
+    flex: none;
+    animation: scroll 48s linear infinite;
+  }
+  .marquee__row--rev ul {
+    animation-direction: reverse;
+  }
+  .marquee:hover ul {
+    animation-play-state: paused;
+  }
+  .marquee li {
+    flex: none;
+    width: 180px;
+    height: 104px;
+    display: grid;
+    place-items: center;
+    padding: 16px 22px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+  }
+  .marquee img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  @keyframes scroll {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @media (max-width: 560px) {
+    .marquee li {
+      width: 140px;
+      height: 84px;
+      padding: 12px 16px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee ul {
+      animation: none;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .marquee ul + ul {
+      display: none;
+    }
+    .marquee__row {
+      justify-content: center;
+    }
+  }
+</style>

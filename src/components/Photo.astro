@@ -1,0 +1,27 @@
+---
+// A photo from public/photos/ served as WebP with a JPEG fallback.
+import { asset } from '../i18n';
+
+interface Props {
+  name: 'city' | 'warehouse' | 'fleet';
+  alt: string;
+  class?: string;
+  eager?: boolean;
+}
+const sizes = { city: [1903, 800], warehouse: [1600, 801], fleet: [1600, 646] } as const;
+const { name, alt, class: cls, eager = false } = Astro.props;
+const [w, h] = sizes[name];
+---
+
+<picture class:list={['photo', cls]}>
+  <source srcset={asset(`photos/${name}.webp`)} type="image/webp" />
+  <img
+    src={asset(`photos/${name}.jpg`)}
+    alt={alt}
+    width={w}
+    height={h}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    fetchpriority={eager ? 'high' : undefined}
+  />
+</picture>

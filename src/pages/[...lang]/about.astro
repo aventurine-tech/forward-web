@@ -1,0 +1,277 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Stats from '../../components/Stats.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import Photo from '../../components/Photo.astro';
+import { localePaths, t, type Locale } from '../../i18n';
+
+export const getStaticPaths = localePaths;
+const { locale } = Astro.props as { locale: Locale };
+const d = t(locale);
+const a = d.about;
+---
+
+<Base locale={locale} title={a.title} description={a.lead}>
+  <PageHero eyebrow={d.home.eyebrow} title={a.title} lead={a.lead} />
+
+  <section class="section">
+    <div class="container story">
+      <div class="story__text">
+        <h2>{a.storyTitle}</h2>
+        {a.story.map((p) => <p>{p}</p>)}
+      </div>
+      <aside class="motto reveal">
+        <span class="motto__label">{a.mottoLabel}</span>
+        <blockquote>{a.motto}</blockquote>
+        <span class="motto__chev" aria-hidden="true"></span>
+      </aside>
+    </div>
+  </section>
+
+  <Stats locale={locale} />
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2>{a.timelineTitle}</h2>
+        <p>{a.timelineLead}</p>
+      </div>
+      <ol class="timeline">
+        {
+          a.timeline.map((m, i) => (
+            <li class="reveal" style={`--delay:${(i % 4) * 0.06}s`}>
+              <span class="timeline__year">{m.year}</span>
+              <p>{m.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="container">
+      <div class="section__head">
+        <h2>{a.valuesTitle}</h2>
+      </div>
+      <ul class="values">
+        {
+          a.values.map((v, i) => (
+            <li class="card reveal" style={`--delay:${i * 0.06}s`}>
+              <span class="values__n">0{i + 1}</span>
+              <h3>{v.title}</h3>
+              <p>{v.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container quality">
+      <Photo name="warehouse" alt={d.photos.warehouse} class="quality__photo reveal" />
+      <div>
+        <span class="quality__badge"><Icon name="quality" size={22} /> ISO 9001</span>
+        <h2>{a.qualityTitle}</h2>
+        <p class="lead">{a.qualityText}</p>
+        <ul class="countries">
+          {a.countries.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand locale={locale} />
+</Base>
+
+<style>
+  .story {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: start;
+  }
+  .story__text p {
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+  .motto {
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+    overflow: hidden;
+    padding: 40px 34px;
+    border-radius: 24px;
+    background: linear-gradient(140deg, var(--blue), var(--blue-700));
+    color: #fff;
+  }
+  .motto__label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+  .motto blockquote {
+    position: relative;
+    z-index: 1;
+    margin: 14px 0 0;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .motto__chev {
+    position: absolute;
+    right: -40px;
+    bottom: -30px;
+    width: 220px;
+    aspect-ratio: 270 / 153;
+    background: #fff;
+    opacity: 0.12;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 270 153'%3E%3Cpath d='M0 0h66l75 76.5L66 153H0l75-76.5zM129 0h66l75 76.5-75 76.5h-66l75-76.5z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 270 153'%3E%3Cpath d='M0 0h66l75 76.5L66 153H0l75-76.5zM129 0h66l75 76.5-75 76.5h-66l75-76.5z'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  /* Timeline: a horizontal track of milestones that wraps into rows. */
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 24px;
+  }
+  .timeline li {
+    position: relative;
+    padding-top: 26px;
+    border-top: 2px solid var(--line);
+  }
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid var(--blue);
+  }
+  .timeline li:last-child::before {
+    background: var(--blue);
+  }
+  .timeline__year {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .timeline p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .values {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+  .values__n {
+    display: block;
+    font-weight: 800;
+    color: var(--blue);
+    margin-bottom: 18px;
+  }
+  .values h3 {
+    font-size: 1.08rem;
+  }
+  .values p {
+    color: var(--muted);
+    font-size: 0.96rem;
+  }
+
+  .quality {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+  }
+  .quality :global(.quality__photo) {
+    aspect-ratio: 4 / 3;
+    box-shadow: var(--shadow-lg);
+  }
+  .quality__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--blue-50);
+    color: var(--blue-600);
+    font-weight: 800;
+    margin-bottom: 18px;
+  }
+  .countries {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .countries li {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 1100px) {
+    .values {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 900px) {
+    .story,
+    .quality {
+      grid-template-columns: 1fr;
+    }
+    .motto {
+      position: relative;
+      top: 0;
+    }
+    .timeline {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .values {
+      grid-template-columns: 1fr;
+    }
+    .timeline {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .timeline li {
+      border-top: 0;
+      border-left: 2px solid var(--line);
+      padding: 0 0 26px 26px;
+    }
+    .timeline li::before {
+      top: 4px;
+      left: -8px;
+    }
+    .timeline__year {
+      font-size: 1.3rem;
+    }
+  }
+</style>
