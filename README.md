@@ -4,6 +4,9 @@ New site for [Forward International](https://www.forward.md), a food import, war
 distribution company in Moldova (since 1994). Built with [Astro](https://astro.build) as a fully
 static site, in Romanian (default, at `/`), English (`/en/...`) and Russian (`/ru/...`).
 
+For non-developers: see [docs/EDITING.md](docs/EDITING.md) for how to change text, brands,
+figures and posts from the browser.
+
 ## Getting started
 
 ```sh
