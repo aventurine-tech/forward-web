@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import CoverageMap from '../../components/CoverageMap.astro';
 import Icon from '../../components/Icon.astro';
 import Photo from '../../components/Photo.astro';
 import { localePaths, t, type Locale } from '../../i18n';
@@ -51,6 +52,8 @@ const photos: Record<string, 'fleet' | 'warehouse' | undefined> = { distribution
       }
     </div>
   </section>
+
+  <CoverageMap locale={locale} />
 
   <CtaBand locale={locale} />
 </Base>
