@@ -4,7 +4,7 @@ name: Check build
 # This job only checks that the site still builds (types, translations, pages).
 on:
   push:
-    branches: [main, claude/project-thread-j645ju]
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
