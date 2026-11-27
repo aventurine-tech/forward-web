@@ -152,6 +152,8 @@ const en = {
       { year: '2019', text: '25 years on the market.' },
       { year: 'Today', text: 'More than 400 people and over 20 international brands.' },
     ],
+    anniversaryAlt: 'The “Forward International 25 years” anniversary poster with the brands in the portfolio',
+    anniversaryCaption: '2019 · 25 years on the market',
     qualityTitle: 'Quality and reach',
     qualityText: 'Our quality management follows ISO 9001. We import from seven countries:',
     countries: ['Romania', 'Ukraine', 'Russia', 'Hungary', 'Poland', 'Italy', 'Greece'],

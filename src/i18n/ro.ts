@@ -153,6 +153,8 @@ const ro: Dictionary = {
       { year: '2019', text: '25 de ani pe piață.' },
       { year: 'Azi', text: 'Peste 400 de oameni și peste 20 de branduri internaționale.' },
     ],
+    anniversaryAlt: 'Afișul aniversar „Forward International 25 ani” cu brandurile din portofoliu',
+    anniversaryCaption: '2019 · 25 de ani pe piață',
     qualityTitle: 'Calitate și acoperire',
     qualityText: 'Managementul calității urmează standardul ISO 9001. Importăm din șapte țări:',
     countries: ['România', 'Ucraina', 'Rusia', 'Ungaria', 'Polonia', 'Italia', 'Grecia'],
