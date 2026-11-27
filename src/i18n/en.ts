@@ -112,7 +112,6 @@ const en = {
     facebookFollow: 'Open our Facebook page',
     facebookText: 'Events, team news and charity work, as we post them on our Facebook page.',
     watch: 'Watch on Instagram',
-    note: 'The Facebook timeline is loaded from Facebook, which may set its own cookies.',
   },
   servicesPage: {
     title: 'Services',
@@ -278,7 +277,7 @@ const en = {
       },
       {
         title: 'Social media posts',
-        text: 'The News page shows posts from our Facebook and Instagram pages. The Facebook timeline is loaded from Meta, which may process data about your visit and set cookies under its own privacy policy.',
+        text: 'The News page shows posts from our Instagram page, with pictures stored on this site, and links to our Facebook and Instagram pages. Nothing is loaded from Meta until you open one of those links.',
       },
       {
         title: 'Your rights',

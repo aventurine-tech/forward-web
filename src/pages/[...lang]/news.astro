@@ -25,9 +25,6 @@ const grid = posts
     text: p.caption.split(/\n\s*\n/)[0].replace(/#\S+/g, '').trim(),
   }));
 
-// Facebook's Page Plugin shows the page's live timeline, so new posts appear on their own.
-const fbLocale = { ro: 'ro_RO', en: 'en_US', ru: 'ru_RU' }[locale];
-const fbSrc = `https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(company.facebook)}&tabs=timeline&width=500&height=640&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&locale=${fbLocale}`;
 ---
 
 <Base locale={locale} title={n.title} description={n.lead}>
@@ -73,16 +70,12 @@ const fbSrc = `https://www.facebook.com/plugins/page.php?href=${encodeURICompone
 
   <section class="section section--soft">
     <div class="container fb">
-      <div class="fb__intro">
-        <span class="fb__icon"><Icon name="facebook" size={28} /></span>
+      <span class="fb__icon"><Icon name="facebook" size={28} /></span>
+      <div class="fb__text">
         <h2>{n.facebookTitle}</h2>
         <p>{n.facebookText}</p>
-        <a class="btn btn--ghost" href={company.facebook} target="_blank" rel="noopener">{n.facebookFollow}</a>
-        <p class="note">{n.note}</p>
       </div>
-      <div class="fb__frame">
-        <iframe title="Facebook" src={fbSrc} loading="lazy" allow="encrypted-media"></iframe>
-      </div>
+      <a class="btn btn--primary" href={company.facebook} target="_blank" rel="noopener">{n.facebookFollow}</a>
     </div>
   </section>
 </Base>
@@ -181,18 +174,17 @@ const fbSrc = `https://www.facebook.com/plugins/page.php?href=${encodeURICompone
     overflow: hidden;
   }
   .fb {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 500px);
-    gap: clamp(32px, 6vw, 80px);
+    display: flex;
     align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
   }
-  .fb__intro {
+  .fb__text {
+    flex: 1 1 320px;
     display: grid;
-    gap: 18px;
-    justify-items: start;
-    max-width: 440px;
+    gap: 6px;
   }
-  .fb__intro p {
+  .fb__text p {
     margin: 0;
     color: var(--muted);
     font-size: 1.05rem;
@@ -200,45 +192,21 @@ const fbSrc = `https://www.facebook.com/plugins/page.php?href=${encodeURICompone
   .fb__icon {
     display: grid;
     place-items: center;
+    flex: none;
     width: 56px;
     height: 56px;
     border-radius: 16px;
     color: #fff;
     background: var(--blue-600);
   }
-  .fb__intro .note {
-    font-size: 0.85rem;
-  }
-  .fb__frame {
-    border-radius: 20px;
-    overflow: hidden;
-    background: #fff;
-    border: 1px solid var(--line);
-    box-shadow: 0 30px 60px -40px rgba(12, 33, 53, 0.5);
-  }
-  .fb iframe {
-    display: block;
-    width: 100%;
-    height: 640px;
-    border: 0;
-  }
   @media (max-width: 1000px) {
     .ig {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .fb {
-      grid-template-columns: 1fr;
-    }
-    .fb__frame {
-      max-width: 500px;
     }
   }
   @media (max-width: 560px) {
     .ig {
       grid-template-columns: 1fr;
-    }
-    .fb iframe {
-      height: 560px;
     }
   }
 </style>
