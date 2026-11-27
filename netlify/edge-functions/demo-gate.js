@@ -47,6 +47,16 @@ ${wrong ? `<p class="err" role="alert">${t.wrong}</p>` : ''}
   });
 }
 
+// One line per event in Netlify's Edge Function logs (Logs > Edge Functions), so it is visible
+// who opened the demo and when. Only the place and the browser are logged, no IP address.
+function log(event, request, context, extra = {}) {
+  const geo = context.geo || {};
+  const ua = request.headers.get('user-agent') || '';
+  const device = /mobile|iphone|android/i.test(ua) ? 'phone' : 'computer';
+  const place = [geo.city, geo.country && geo.country.name].filter(Boolean).join(', ') || 'unknown place';
+  console.log(`[demo] ${event} | ${place} | ${device}${extra.path ? ` | ${extra.path}` : ''}`);
+}
+
 export default async (request, context) => {
   const password = (Netlify.env.get('DEMO_PASSWORD') || '').trim();
   if (!password) return;
@@ -56,7 +66,11 @@ export default async (request, context) => {
   if (url.pathname === '/__demo-login' && request.method === 'POST') {
     const form = await request.formData();
     const next = safeNext(form.get('next'));
-    if (String(form.get('pw') || '').trim() !== password) return loginPage(next, true);
+    if (String(form.get('pw') || '').trim() !== password) {
+      log('wrong password', request, context);
+      return loginPage(next, true);
+    }
+    log('login', request, context);
     return new Response(null, {
       status: 303,
       headers: {
@@ -68,11 +82,13 @@ export default async (request, context) => {
   }
 
   if (context.cookies.get(COOKIE) === token) {
+    if ((request.headers.get('accept') || '').includes('text/html')) log('page view', request, context, { path: url.pathname });
     const response = await context.next();
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');
     response.headers.set('Cache-Control', 'private, no-store');
     return response;
   }
+  if ((request.headers.get('accept') || '').includes('text/html')) log('password page shown', request, context, { path: url.pathname });
   return loginPage(url.pathname + url.search, false);
 };
 
